@@ -1,4 +1,11 @@
 <script>
+	let signup = false;
+    let textField = ["Sign Up","Sign In"]
+	function signUpField() {
+        [textField[0],textField[1]] = [textField[1],textField[0]]
+        console.log(textField)
+		signup = !signup;
+	}
 </script>
 
 <div class="login-screen min-h-screen grid grid-flow-col">
@@ -28,30 +35,42 @@
 		<div class="card w-full h-full sm:max-w-fit bg-base-100 ">
 			<div class="card-body w-[512px] max-w-full sm:px-12 justify-center sm:mb-32">
 				<h2 class="card-title font-bold">Sign In!</h2>
-				<span class="inline">
+				<span class="inline pb-8">
 					New to PreXion?
-					<a href="#" class="link link-primary">Sign up</a>
+					<a href="#" class="link link-primary" on:click={signUpField}>{textField[0]}</a>
 				</span>
 				<div class="form-control">
 					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<label class="label">
 						<span class="label-text">Email</span>
 					</label>
-					<input type="text" placeholder="email" class="input input-bordered" />
+					<!-- svelte-ignore a11y-autofocus -->
+					<input type="text" placeholder="email" class="input input-bordered" autofocus />
 				</div>
 				<div class="form-control">
 					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<label class="label">
 						<span class="label-text">Password</span>
 					</label>
-					<input type="text" placeholder="password" class="input input-bordered" />
+					<input type="password" placeholder="password" class="input input-bordered" />
+					{#if signup}
+						<!-- svelte-ignore a11y-label-has-associated-control -->
+						<label class="label">
+							<span class="label-text">Confirm Password</span>
+						</label>
+						<input type="password" placeholder="Confirm Password" class="input input-bordered" />
+					{/if}
 					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<label class="label">
 						<a href="#" class="label-text-alt link link-hover link-primary">Forgot password?</a>
 					</label>
 				</div>
 				<div class="form-control mt-6">
-					<button class="btn btn-primary">Login</button>
+					{#if signup}
+						<button class="btn btn-primary">Sign up</button>
+					{:else}
+						<button class="btn btn-primary">Login</button>
+					{/if}
 				</div>
 			</div>
 		</div>
