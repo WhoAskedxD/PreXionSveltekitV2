@@ -1,9 +1,9 @@
 <script>
 	let signup = false;
-    let textField = ["Sign Up","Sign In"]
+	let textField = ['Sign Up', 'Sign In'];
 	function signUpField() {
-        [textField[0],textField[1]] = [textField[1],textField[0]]
-        console.log(textField)
+		[textField[0], textField[1]] = [textField[1], textField[0]];
+		console.log(textField);
 		signup = !signup;
 	}
 </script>
@@ -34,11 +34,8 @@
 		</div>
 		<div class="card w-full h-full sm:max-w-fit bg-base-100 ">
 			<div class="card-body w-[512px] max-w-full sm:px-12 justify-center sm:mb-32">
-				<h2 class="card-title font-bold">Sign In!</h2>
-				<span class="inline pb-8">
-					New to PreXion?
-					<a href="#" class="link link-primary" on:click={signUpField}>{textField[0]}</a>
-				</span>
+				<h2 class="card-title font-bold text-2xl">Welcome Back!</h2>
+				<span class="inline pb-2"> Welcome back! Please Sign in below. </span>
 				<div class="form-control">
 					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<label class="label">
@@ -71,11 +68,19 @@
 					{:else}
 						<button class="btn btn-primary">Login</button>
 					{/if}
+					<span class="pt-6 text-center"
+						>Dont have an account?
+						<a href="#" class="link link-hover link-primary" on:click={signUpField}
+							>{textField[0]}</a
+						>
+					</span>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="prexion-image hidden sm:block">
-		<img src="/PreXion-logo_4c-1_1506.jpg" alt="prexion logo" class="" />
+	<div class="prexion-image hidden sm:flex sm:items-center">
+		<div class="">
+			<img src="/PreXion-logo_4c-1_1506.jpg" alt="prexion logo" class="" />
+		</div>
 	</div>
 </div>
