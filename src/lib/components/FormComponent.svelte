@@ -42,6 +42,7 @@
 				</div>
 			{/each}
 			<div class="form-control pt-4">
+                <slot name='extraField' />
 				<slot name="formAction" />
                 <slot name='formSubAction' />
 			</div>
