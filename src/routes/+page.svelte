@@ -1,7 +1,6 @@
 <script>
 	export let data;
 	import { LandingPage,  } from '$lib/components';
-	console.log(data.user);
 	
 </script>
 

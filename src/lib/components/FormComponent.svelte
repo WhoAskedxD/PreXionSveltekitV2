@@ -3,7 +3,6 @@
 	export let subtitle;
 	export let formFields;
     export let color;
-    export let data;
 </script>
 
 <div class="card w-full sm:max-w-fit ">
@@ -41,7 +40,7 @@
 					{/if}
 				</div>
 			{/each}
-			<div class="form-control pt-4">
+			<div class="form-control">
                 <slot name='extraField' />
 				<slot name="formAction" />
                 <slot name='formSubAction' />
