@@ -7,6 +7,7 @@
 	<div class="drawer drawer-mobile">
 		<input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
 		<div class="drawer-content flex flex-col items-center justify-center">
+			<!-- NavBar content here -->
 			<div class="navbar bg-base-100">
 				<label for="my-drawer-2" class="btn btn-square btn-ghost lg:hidden">
 					<svg
@@ -27,6 +28,7 @@
 					<a href="/" class="btn btn-ghost normal-case text-xl">PreXion</a>
 				</div>
 				<div class="flex-none">
+					<div>{data.user.name}</div>
 					<button class="btn btn-square btn-ghost">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +50,7 @@
 		</div>
 		<div class="drawer-side">
 			<label for="my-drawer-2" class="drawer-overlay" />
-			<ul class="menu p-4 w-80 bg-base-100 text-base-content">
+			<ul class="menu p-4 w-64 bg-base-100 text-base-content">
 				<!-- Sidebar content here -->
 				<li><a>Sidebar Item 1</a></li>
 				<li><a>Sidebar Item 2</a></li>
