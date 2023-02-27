@@ -1,22 +1,24 @@
 <script>
 	import { enhance, applyAction  } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	export let title;
 	export let subtitle;
 	export let formFields;
 	export let color;
 	const submitUpdateProfile = () => {
-		return async ({ result }) => {
+		return async ({ result, update }) => {
 			console.log(`result is :`,result)
 			switch (result.type) {
 				case 'success':
-					console.log(`case was success..`);
-					await invalidateAll();
+					await applyAction(result);
+					update()
 					break;
 				case 'error':
-					console.log(`case was error..`);
+					break;
+				case 'failure':
+					await applyAction(result);
 					break;
 				default:
-					console.log(`case was default..`);
 					await applyAction(result);
 			}
 		};

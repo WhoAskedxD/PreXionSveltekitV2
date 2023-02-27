@@ -1,4 +1,4 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -20,17 +20,25 @@ export const actions = {
 	},
 	register: async ({ locals, request }) => {
 		const body = Object.fromEntries(await request.formData());
-		let username = generateUsername(body.name.split(' ').join('')).toLowerCase();
-
+		let username = (body.name.split(' ').join('')).toLowerCase();
+		const {confirm_password:passwordConfirm } = body
 		try {
-			await locals.pb.collection('users').create({ username, ...body });
+			await locals.pb.collection('users').create({ username,passwordConfirm, ...body });
 			await locals.pb.collection('users').requestVerification(body.email);
 		} catch (err) {
-			console.log('Error: ', err);
-			throw error(500, 'Something went wrong');
+			if (err.data.data){
+				console.log(err.data)
+				const {email = '',password = '',passwordConfirm = ''} = err.data.data
+				console.log(email.message,password.message,passwordConfirm.message)
+				return fail(400,{
+					error: email.message || password.message || passwordConfirm.message
+				})
+			}
+			throw error(500, `Something went wrong ${JSON.stringify(err.data)}`);
 		}
-		throw redirect(303, '/');
-
+		return {
+			registered:true
+		}
 	},
 	resetPassword: async ({ request, locals }) => {
 		const body = Object.fromEntries(await request.formData());

@@ -1,8 +1,7 @@
 <script>
 	import { FormComponent } from '$lib/components';
 	import { page } from '$app/stores';
-	import { enhance } from '$app/forms';
-	let signup = false;
+	$: signup = $page.form?.registered || true;
 	let textField = ['Sign Up', 'Sign In'];
 	function signUpField() {
 		[textField[0], textField[1]] = [textField[1], textField[0]];
@@ -15,7 +14,9 @@
 		<div class="navbar bg-base-100 rounded-xl px-4">
 			<div class="flex-1">
 				<img src="/PreXionSwish.jpg" alt="PrexionSwish logo" class="" />
-				<a class="btn btn-ghost normal-case text-xl" href="/">PreXionWebApp</a>
+				<a class="btn btn-ghost normal-case text-xl" href="/"
+					>PreXionWebApp {$page.form?.registered}</a
+				>
 			</div>
 			<div class="flex-none">
 				<!-- <button class="btn btn-square btn-ghost">
@@ -40,19 +41,42 @@
 			</div>
 		</div>
 		<div class="form-card">
-			{#if signup}
+			{#if !signup}
 				<FormComponent
 					title="Welcome Back!"
 					subtitle="PreXion Internal WebApp! Please Sign Up below."
 					formFields={['name', 'email', 'password', 'confirm password']}
 				>
-					<button slot="formAction" class="btn btn-primary mt-4" formaction="?/register">Sign up</button>
+					<button slot="formAction" class="btn btn-primary mt-4" formaction="?/register"
+						>Sign up</button
+					>
 					<span slot="formSubAction" class="pt-6 text-center"
 						>Already have an Account?
 						<!-- svelte-ignore a11y-invalid-attribute -->
 						<a href="" class="link link-hover link-primary" on:click={signUpField}>{textField[0]}</a
 						>
 					</span>
+					<div slot="extraField" class="py-2 flex flex-col">
+						{#if $page.form?.error}
+							<div class="alert alert-error shadow-lg w-full max-w-md">
+								<div>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="stroke-current flex-shrink-0 h-6 w-6"
+										fill="none"
+										viewBox="0 0 24 24"
+										><path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+										/></svg
+									>
+									<span>{$page.form?.error}.</span>
+								</div>
+							</div>
+						{/if}
+					</div>
 				</FormComponent>
 			{:else}
 				<FormComponent
@@ -62,6 +86,25 @@
 				>
 					<div slot="extraField" class="py-2 flex flex-col">
 						<span class="text-center">
+							{#if $page.form?.registered}
+								<div class="alert alert-success shadow-lg">
+									<div>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="stroke-current flex-shrink-0 h-6 w-6"
+											fill="none"
+											viewBox="0 0 24 24"
+											><path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+											/></svg
+										>
+										<span>Successfully registered Please check your email!</span>
+									</div>
+								</div>
+							{/if}
 							<label for="my-modal-4" class="link link-hover link-primary">Forgot Password?</label>
 							<input type="checkbox" id="my-modal-4" class="modal-toggle" />
 							<label for="my-modal-4" class="modal cursor-pointer">
@@ -71,7 +114,6 @@
 										action="?/resetPassword"
 										method="POST"
 										class="flex flex-col items-center space-y-2 w-full pt-4"
-										use:enhance
 									>
 										<div class="form-control w-full max-w-md">
 											<label for="email" class="label font-medium pb-1">
@@ -114,16 +156,29 @@
 						{#if $page.form?.success}
 							<div class="alert alert-success shadow-lg w-full max-w-md">
 								<div>
-									<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="stroke-current flex-shrink-0 h-6 w-6"
+										fill="none"
+										viewBox="0 0 24 24"
+										><path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+										/></svg
+									>
 									<span>An email has been sent to reset your password!</span>
 								</div>
 							</div>
 						{/if}
 					</div>
 					<button slot="formAction" class="btn btn-primary" formaction="?/login">Log In</button>
-					<span slot="formSubAction" class="pt-6 text-center">Don't have an Account?
+					<span slot="formSubAction" class="pt-6 text-center"
+						>Don't have an Account?
 						<!-- svelte-ignore a11y-invalid-attribute -->
-						<a href="" class="link link-hover link-primary" on:click={signUpField}>{textField[0]}</a>
+						<a href="" class="link link-hover link-primary" on:click={signUpField}>{textField[0]}</a
+						>
 					</span>
 				</FormComponent>
 			{/if}
