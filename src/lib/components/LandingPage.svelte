@@ -1,6 +1,7 @@
 <script>
 	import { FormComponent } from '$lib/components';
 	import { page } from '$app/stores';
+	import { enhance } from '$app/forms';
 	let signup = false;
 	let textField = ['Sign Up', 'Sign In'];
 	function signUpField() {
@@ -70,6 +71,7 @@
 										action="?/resetPassword"
 										method="POST"
 										class="flex flex-col items-center space-y-2 w-full pt-4"
+										use:enhance
 									>
 										<div class="form-control w-full max-w-md">
 											<label for="email" class="label font-medium pb-1">

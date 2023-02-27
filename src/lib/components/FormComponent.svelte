@@ -1,19 +1,39 @@
 <script>
+	import { enhance, applyAction  } from '$app/forms';
 	export let title;
 	export let subtitle;
 	export let formFields;
-    export let color;
+	export let color;
+	const submitUpdateProfile = () => {
+		return async ({ result }) => {
+			console.log(`result is :`,result)
+			switch (result.type) {
+				case 'success':
+					console.log(`case was success..`);
+					await invalidateAll();
+					break;
+				case 'error':
+					console.log(`case was error..`);
+					break;
+				default:
+					console.log(`case was default..`);
+					await applyAction(result);
+			}
+		};
+	};
 </script>
 
 <div class="card w-full sm:max-w-fit ">
 	<div
-		class="card-body w-[512px] max-w-full {color? color : 'bg-base-100'} sm:px-12 justify-center sm:my-32  rounded-2xl"
+		class="card-body w-[512px] max-w-full {color
+			? color
+			: 'bg-base-100'} sm:px-12 justify-center sm:my-32  rounded-2xl"
 	>
 		<h2 class="card-title font-bold text-2xl justify-center">{title}</h2>
 		<span class="inline pb-2 text-center">
 			{subtitle}
 		</span>
-		<form method="POST">
+		<form method="POST" use:enhance={submitUpdateProfile}>
 			{#each formFields as field}
 				<div class="form-control">
 					<!-- svelte-ignore a11y-label-has-associated-control -->
@@ -27,7 +47,7 @@
 							type="password"
 							placeholder={field}
 							class="input input-bordered"
-							name={field.replace(/\s/g,'_')}
+							name={field.replace(/\s/g, '_')}
 						/>
 					{:else}
 						<input
@@ -41,11 +61,10 @@
 				</div>
 			{/each}
 			<div class="form-control">
-                <slot name='extraField' />
+				<slot name="extraField" />
 				<slot name="formAction" />
-                <slot name='formSubAction' />
+				<slot name="formSubAction" />
 			</div>
 		</form>
-
 	</div>
 </div>
