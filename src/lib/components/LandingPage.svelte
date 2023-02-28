@@ -10,12 +10,12 @@
 </script>
 
 <div class="login-screen min-h-screen max-h-screen grid grid-flow-col ">
-	<div class="login-container w-full h-full sm:w-[40vw] flex flex-col items-center">
+	<div class="login-container w-full h-full lg:w-[40vw] flex flex-col items-center">
 		<div class="navbar bg-base-100 rounded-xl px-4">
 			<div class="flex-1">
 				<img src="/PreXionSwish.jpg" alt="PrexionSwish logo" class="" />
 				<a class="btn btn-ghost normal-case text-xl" href="/"
-					>PreXionWebApp {$page.form?.registered}</a
+					>PreXionWebApp</a
 				>
 			</div>
 			<div class="flex-none">
@@ -185,7 +185,7 @@
 		</div>
 	</div>
 	<div
-		class="prexion-image hidden sm:flex sm:items-center bg-gradient-to-r from-cyan-500 to-blue-500 rounded-3xl my-2 mr-2"
+		class="prexion-image hidden lg:flex lg:items-center bg-gradient-to-r from-cyan-500 to-blue-500 rounded-3xl my-2 mr-2"
 	>
 		<div class="px-56">
 			<img src="/PreXion-logo_4c-1_1506.jpg" alt="prexion logo" class="rounded-2xl" />

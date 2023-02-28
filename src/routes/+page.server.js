@@ -27,9 +27,7 @@ export const actions = {
 			await locals.pb.collection('users').requestVerification(body.email);
 		} catch (err) {
 			if (err.data.data){
-				console.log(err.data)
 				const {email = '',password = '',passwordConfirm = ''} = err.data.data
-				console.log(email.message,password.message,passwordConfirm.message)
 				return fail(400,{
 					error: email.message || password.message || passwordConfirm.message
 				})

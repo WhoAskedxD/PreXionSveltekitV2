@@ -1,5 +1,6 @@
 <script>
 	import '../app.postcss';
+	import { page } from '$app/stores';
 	export let data;
 </script>
 
@@ -23,26 +24,33 @@
 						/></svg
 					>
 				</label>
-
 				<div class="flex-1">
 					<a href="/" class="btn btn-ghost normal-case text-xl">PreXion</a>
 				</div>
-				<div class="flex-none">
-					<div>{data.user.name}</div>
-					<button class="btn btn-square btn-ghost">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							class="inline-block w-5 h-5 stroke-current"
-							><path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-							/></svg
+				<div class="flex-none gap-2">
+					<div class="px-1">{data.user.name}</div>
+					<div class="dropdown dropdown-end">
+						<!-- svelte-ignore a11y-label-has-associated-control -->
+						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+						<label tabindex="0" class="btn btn-ghost btn-circle avatar">
+							<div class="w-10 rounded-full">
+								<img src={`https://ui-avatars.com/api/?name=${data.user.name}`} alt="User Avatar" />
+							</div>
+						</label>
+						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+						<ul
+							tabindex="0"
+							class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
 						>
-					</button>
+							<li><a href="/my/settings" class="justify-between">Profile</a></li>
+							<li><a href="/">Settings</a></li>
+							<li>
+								<form action="/logout" method="POST">
+									<button type="submit" class="w-full text-start">Logout</button>
+								</form>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 			<!-- Page content here -->
@@ -50,10 +58,18 @@
 		</div>
 		<div class="drawer-side">
 			<label for="my-drawer-2" class="drawer-overlay" />
-			<ul class="menu p-4 w-64 bg-base-100 text-base-content">
+			<ul class="menu p-4 w-48 lg:w-24 bg-neutral text-neutral-content">
 				<!-- Sidebar content here -->
-				<li><a>Sidebar Item 1</a></li>
-				<li><a>Sidebar Item 2</a></li>
+				<li class="w-full">
+					<a class=" my-2 px-0 py-0" href="/"
+						><img class="rounded-lg {$page.url.pathname === "/protected/contacts" ? 'bg-neutral-content' : ''}" src="/icons/icons8-contacts-96.png" alt="Prexion Logo" /></a
+					>
+				</li>
+				<li class="w-full">
+					<a class=" my-2 px-0 py-0" href="/"
+						><img class="rounded-lg" src="/icons/icons8-contacts-96.png" alt="Prexion Logo" /></a
+					>
+				</li>
 			</ul>
 		</div>
 	</div>

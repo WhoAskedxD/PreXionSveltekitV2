@@ -7,7 +7,7 @@
 	export let color;
 	const submitUpdateProfile = () => {
 		return async ({ result, update }) => {
-			console.log(`result is :`,result)
+			// console.log(`result is :`,result)
 			switch (result.type) {
 				case 'success':
 					await applyAction(result);
@@ -25,9 +25,9 @@
 	};
 </script>
 
-<div class="card w-full sm:max-w-fit ">
+<div class="card w-full ">
 	<div
-		class="card-body w-[512px] max-w-full {color
+		class="card-body max-w-full {color
 			? color
 			: 'bg-base-100'} sm:px-12 justify-center sm:my-32  rounded-2xl"
 	>
