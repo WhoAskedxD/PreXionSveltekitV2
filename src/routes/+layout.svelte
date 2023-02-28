@@ -1,21 +1,24 @@
 <script>
 	import '../app.postcss';
 	import { page } from '$app/stores';
+	let drawerToggle = false;
 	export let data;
 </script>
 
 {#if data.user}
-	<div class="drawer drawer-mobile">
+	<div class="drawer {drawerToggle ? 'drawer-mobile' : ''}">
 		<input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
 		<div class="drawer-content flex flex-col items-center justify-center">
 			<!-- NavBar content here -->
 			<div class="navbar bg-base-100">
-				<label for="my-drawer-2" class="btn btn-square btn-ghost lg:hidden">
+				<label for="my-drawer-2" class="btn btn-square btn-ghost" >
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24"
 						class="inline-block w-5 h-5 stroke-current"
+						on:click={() => (drawerToggle =!drawerToggle)}
 						><path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -53,6 +56,7 @@
 					</div>
 				</div>
 			</div>
+			<div class="divider my-0"></div>
 			<!-- Page content here -->
 			<slot />
 		</div>
@@ -61,14 +65,20 @@
 			<ul class="menu p-4 w-48 lg:w-24 bg-neutral text-neutral-content">
 				<!-- Sidebar content here -->
 				<li class="w-full">
-					<a class=" my-2 px-0 py-0" href="/"
-						><img class="rounded-lg {$page.url.pathname === "/protected/contacts" ? 'bg-neutral-content' : ''}" src="/icons/icons8-contacts-96.png" alt="Prexion Logo" /></a
-					>
+					<a class=" my-2 px-0 py-0" href="/">
+						<img class="rounded-lg " src="/PreXion-logo_4c-1_1506.jpg" alt="Prexion Logo" />
+					</a>
 				</li>
 				<li class="w-full">
 					<a class=" my-2 px-0 py-0" href="/"
-						><img class="rounded-lg" src="/icons/icons8-contacts-96.png" alt="Prexion Logo" /></a
-					>
+						><img
+							class="rounded-lg {$page.url.pathname === '/protected/contacts'
+								? 'bg-neutral-content'
+								: ''}"
+							src="/icons/icons8-contacts-96.png"
+							alt="Prexion Logo"
+						/>
+					</a>
 				</li>
 			</ul>
 		</div>
