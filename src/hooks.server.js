@@ -13,12 +13,12 @@ export const handle = async ({ event, resolve }) => {
         } else {
             event.locals.user = undefined;
         }
-        if (event.url.pathname.startsWith("/.")) {
-            if(!event.locals.user) {
-                return Response.redirect(`${event.url.origin}`,303)
+        // if (event.url.pathname.startsWith("/.")) {
+        //     if(!event.locals.user) {
+        //         return Response.redirect(`${event.url.origin}`,303)
     
-            }
-        }
+        //     }
+        // }
         
     } catch (_) {
         // clear the auth store on failed refresh

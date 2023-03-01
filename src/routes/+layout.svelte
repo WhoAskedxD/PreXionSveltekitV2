@@ -46,7 +46,7 @@
 							class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
 						>
 							<li><a href="/my/settings" class="justify-between">Profile</a></li>
-							<li><a href="/">Settings</a></li>
+							<li><a href="/my/settings">Settings</a></li>
 							<li>
 								<form action="/logout" method="POST">
 									<button type="submit" class="w-full text-start">Logout</button>
