@@ -6,19 +6,18 @@
 </script>
 
 {#if data.user}
-	<div class="drawer {drawerToggle ? 'drawer-mobile' : ''}">
+	<div class="drawer drawer-mobile">
 		<input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
 		<div class="drawer-content flex flex-col items-center justify-center">
 			<!-- NavBar content here -->
 			<div class="navbar bg-base-100">
-				<label for="my-drawer-2" class="btn btn-square btn-ghost" >
-					<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<label for="my-drawer-2" class="btn btn-square btn-ghost" on:click={() => (drawerToggle =!drawerToggle)}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24"
 						class="inline-block w-5 h-5 stroke-current"
-						on:click={() => (drawerToggle =!drawerToggle)}
 						><path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -62,7 +61,7 @@
 		</div>
 		<div class="drawer-side">
 			<label for="my-drawer-2" class="drawer-overlay" />
-			<ul class="menu p-4 w-48 lg:w-24 bg-neutral text-neutral-content">
+			<ul class="menu p-4 w-48 lg:w-24 bg-neutral text-neutral-content {drawerToggle ? 'hidden':''}">
 				<!-- Sidebar content here -->
 				<li class="w-full">
 					<a class=" my-2 px-0 py-0" href="/">

@@ -14,6 +14,11 @@ export const actions = {
 			}
 		} catch (err) {
 			console.log('Error: ', err.data);
+			if(err.data){
+				return fail(400,{
+					fail:err.data.message
+				})
+			}
 			throw error(500, 'Something went wrong logging in');
 		}
 		throw redirect(303, '/');
