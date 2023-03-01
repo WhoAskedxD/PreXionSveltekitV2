@@ -1,17 +1,15 @@
 <script>
 	import { enhance, applyAction  } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 	export let title;
 	export let subtitle;
 	export let formFields;
 	export let color;
 	const submitUpdateProfile = () => {
 		return async ({ result, update }) => {
-			// console.log(`result is :`,result)
+			console.log(`result is :`,result)
 			switch (result.type) {
 				case 'success':
 					await applyAction(result);
-					update()
 					break;
 				case 'error':
 					break;
@@ -35,7 +33,7 @@
 		<span class="inline pb-2 text-center">
 			{subtitle}
 		</span>
-		<form method="POST" use:enhance={submitUpdateProfile}>
+		<form method="POST" use:enhance>
 			{#each formFields as field}
 				<div class="form-control">
 					<!-- svelte-ignore a11y-label-has-associated-control -->

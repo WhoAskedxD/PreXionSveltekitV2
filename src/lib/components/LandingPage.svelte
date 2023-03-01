@@ -1,12 +1,8 @@
 <script>
 	import { FormComponent } from '$lib/components';
 	import { page } from '$app/stores';
-	$: signup = $page.form?.registered || true;
-	let textField = ['Sign Up', 'Sign In'];
-	function signUpField() {
-		[textField[0], textField[1]] = [textField[1], textField[0]];
-		signup = !signup;
-	}
+	$: signup = false || $page.form?.error;
+	// $: console.log($page.form?.error)
 </script>
 
 <div class="login-screen min-h-screen max-h-screen grid grid-flow-col ">
@@ -15,7 +11,7 @@
 			<div class="flex-1">
 				<img src="/PreXionSwish.jpg" alt="PrexionSwish logo" class="" />
 				<a class="btn btn-ghost normal-case text-xl" href="/"
-					>PreXionWebApp</a
+					>PreXionWebApp </a
 				>
 			</div>
 			<div class="flex-none">
@@ -41,19 +37,19 @@
 			</div>
 		</div>
 		<div class="form-card">
-			{#if !signup}
+			{#if signup}
 				<FormComponent
 					title="Welcome Back!"
 					subtitle="PreXion Internal WebApp! Please Sign Up below."
 					formFields={['name', 'email', 'password', 'confirm password']}
 				>
-					<button slot="formAction" class="btn btn-primary mt-4" formaction="?/register"
+					<button slot="formAction" class="btn btn-primary mt-4" formaction="?/register" 
 						>Sign up</button
 					>
 					<span slot="formSubAction" class="pt-6 text-center"
 						>Already have an Account?
 						<!-- svelte-ignore a11y-invalid-attribute -->
-						<a href="" class="link link-hover link-primary" on:click={signUpField}>{textField[0]}</a
+						<a href="" class="link link-hover link-primary" on:click={() => (signup = false)}>Sign In</a
 						>
 					</span>
 					<div slot="extraField" class="py-2 flex flex-col">
@@ -177,7 +173,7 @@
 					<span slot="formSubAction" class="pt-6 text-center"
 						>Don't have an Account?
 						<!-- svelte-ignore a11y-invalid-attribute -->
-						<a href="" class="link link-hover link-primary" on:click={signUpField}>{textField[0]}</a
+						<a href="" class="link link-hover link-primary" on:click={() => (signup = true)}>Sign Up</a
 						>
 					</span>
 				</FormComponent>

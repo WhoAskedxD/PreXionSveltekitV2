@@ -57,7 +57,7 @@
 					/>
 				</div>
 			</label>
-			<input
+			<!-- <input
 				type="file"
 				name="avatar"
 				id="avatar"
@@ -66,7 +66,7 @@
 				hidden
 				on:change={showPreview}
 				disabled={loading}
-			/>
+			/> -->
 		</div>
 		<!-- <Input id="name" label="Name" value={data?.user?.name} disabled={loading} /> -->
 		<div class="w-full max-w-lg pt-3">
