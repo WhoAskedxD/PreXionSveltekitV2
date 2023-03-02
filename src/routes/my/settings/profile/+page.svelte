@@ -40,10 +40,10 @@
 		enctype="multipart/form-data"
 		use:enhance={submitUpdateProfile}
 	>
-		<h3 class="text-2xl font-medium">Update Profile</h3>
-		<div class="form-control w-full max-w-lg">
-			<label for="avatar" class="label font-medium pb-1">
-				<span class="label-text">Profile Picture</span>
+			<div class="form-control w-full max-w-lg flex-row justify-between">
+			<label for="" class="label font-medium pb-1 order-last flex-col justify-center">
+				<p class="w-full text-left">Profile Picture</p>
+				<span class="">Min 200x200px. PNG or .JPEG</span>
 			</label>
 			<label for="avatar" class="avatar w-32 rounded-full hover:cursor-pointer">
 				<label for="avatar" class="absolute -bottom-0.5 -right-0.5 hover:cursor-pointer">
