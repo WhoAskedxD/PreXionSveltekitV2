@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 export const actions = {
 	updateProfile: async ({ request, locals }) => {
@@ -12,7 +12,12 @@ export const actions = {
 			locals.user.name = name;
 			locals.user.avatar = avatar;
 		} catch (err) {
-			console.log('Error: ', err);
+			console.log('Error: ', err.data);
+			if(err.data){
+				return fail(400,{
+					fail:err.data.message
+				})
+			}
 			throw error(400, 'Something went wrong updating your profile');
 		}
 		return {
