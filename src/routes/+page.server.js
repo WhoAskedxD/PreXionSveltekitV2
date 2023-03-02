@@ -13,7 +13,7 @@ export const actions = {
 				};
 			}
 		} catch (err) {
-			console.log('Error: ', err.data);
+			// console.log('Error: ', err.data);
 			if(err.data){
 				return fail(400,{
 					fail:err.data.message

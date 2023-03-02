@@ -1,6 +1,7 @@
 <script>
 	import '../app.postcss';
 	import { page } from '$app/stores';
+	import {getImageURL} from '$lib/utils'
 	let drawerToggle = false;
 	export let data;
 </script>
@@ -36,7 +37,10 @@
 						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 						<label tabindex="0" class="btn btn-ghost btn-circle avatar">
 							<div class="w-10 rounded-full">
-								<img src={`https://ui-avatars.com/api/?name=${data.user.name}`} alt="User Avatar" />
+								<img src={data.user?.avatar
+									? getImageURL(data.user?.collectionId, data.user?.id, data.user?.avatar)
+									: `https://ui-avatars.com/api/?name=${data.user?.name}`}
+									id="avatar-preview" alt="User Avatar" />
 							</div>
 						</label>
 						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -61,7 +65,7 @@
 		</div>
 		<div class="drawer-side">
 			<label for="my-drawer-2" class="drawer-overlay" />
-			<ul class="menu p-4 w-48 lg:w-24 bg-neutral text-neutral-content {drawerToggle ? 'hidden':''}">
+			<ul class="menu p-4 w-48 lg:w-24 bg-neutral text-neutral-content {drawerToggle ? 'sm:hidden':''}">
 				<!-- Sidebar content here -->
 				<li class="w-full">
 					<a class=" my-2 px-0 py-0" href="/">

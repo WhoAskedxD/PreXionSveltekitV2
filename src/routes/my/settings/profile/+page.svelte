@@ -1,6 +1,8 @@
 <script>
 	import { enhance, applyAction } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
+	import { Input } from '$lib/components';
+	import {getImageURL} from '$lib/utils'
 	export let data;
 	let loading;
 	$: loading = false;
@@ -51,7 +53,9 @@
 				</label>
 				<div class="w-32 rounded-full">
 					<img
-						src={`https://ui-avatars.com/api/?name=${data.user?.name}`}
+					src={data.user?.avatar
+						? getImageURL(data.user?.collectionId, data.user?.id, data.user?.avatar)
+						: `https://ui-avatars.com/api/?name=${data.user?.name}`}
 						alt="user avatar"
 						id="avatar-preview"
 					/>
@@ -68,7 +72,8 @@
 				disabled={loading}
 			/>
 		</div>
-		<!-- <Input id="name" label="Name" value={data?.user?.name} disabled={loading} /> -->
+		<Input id="name" label="Name" value={data?.user?.name} disabled={loading} />
+
 		<div class="w-full max-w-lg pt-3">
 			<button class="btn btn-primary w-full max-w-lg" type="submit" disabled={loading}>
 				Update Profile
