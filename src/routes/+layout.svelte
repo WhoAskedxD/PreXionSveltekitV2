@@ -40,7 +40,7 @@
 								<img src={data.user?.avatar
 									? getImageURL(data.user?.collectionId, data.user?.id, data.user?.avatar)
 									: `https://ui-avatars.com/api/?name=${data.user?.name}`}
-									id="avatar-preview" alt="User Avatar" />
+									alt="User Avatar" />
 							</div>
 						</label>
 						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->

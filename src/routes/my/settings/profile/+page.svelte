@@ -14,6 +14,8 @@
 			const src = URL.createObjectURL(files[0]);
 			const preview = document.getElementById('avatar-preview');
 			preview.src = src;
+			console.log(`showing preview:`,preview)
+
 		}
 	};
 	const submitUpdateProfile = () => {
