@@ -13,12 +13,11 @@ export const handle = async ({ event, resolve }) => {
         } else {
             event.locals.user = undefined;
         }
-        // if (event.url.pathname.startsWith("/.")) {
-        //     if(!event.locals.user) {
-        //         return Response.redirect(`${event.url.origin}`,303)
-    
-        //     }
-        // }
+        if (event.url.pathname != '/') {
+            if(!event.locals.user) {
+                return Response.redirect(`${event.url.origin}`,303)
+            }
+        }
         
     } catch (_) {
         // clear the auth store on failed refresh
@@ -26,7 +25,6 @@ export const handle = async ({ event, resolve }) => {
     }
     
     const response = await resolve(event);
-
     // send back the default 'pb_auth' cookie to the client with the latest store state
     response.headers.append('set-cookie', event.locals.pb.authStore.exportToCookie({ secure: false }));
     return response;

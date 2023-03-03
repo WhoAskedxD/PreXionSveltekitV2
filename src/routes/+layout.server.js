@@ -5,9 +5,9 @@ export const load = ({ locals, url }) => {
 			user: locals.user
 		};
 	}
-
 	return {
         url:url.pathname,
 		user: undefined
 	};
+	
 };
