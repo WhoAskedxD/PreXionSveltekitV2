@@ -2,7 +2,7 @@
 	import '../app.postcss';
 	import { page } from '$app/stores';
 	import {getImageURL} from '$lib/utils'
-	let drawerToggle = false;
+	$: drawerToggle = true;
 	export let data;
 </script>
 
