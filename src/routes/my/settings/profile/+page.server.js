@@ -30,6 +30,11 @@ export const actions = {
 		try {
 			await locals.pb.collection('users').requestEmailChange(data.email);
 		} catch (err) {
+			if(err.data){
+				return fail(400,{
+					emailFail:err.data.data.newEmail.message
+				})
+			}
 			throw error(err.status, err.message);
 		}
 

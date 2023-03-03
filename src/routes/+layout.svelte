@@ -61,7 +61,9 @@
 			</div>
 			<div class="divider my-0"></div>
 			<!-- Page content here -->
-			<slot />
+			<div class="h-full w-full">
+				<slot />
+			</div>
 		</div>
 		<div class="drawer-side">
 			<label for="my-drawer-2" class="drawer-overlay" />
@@ -73,7 +75,7 @@
 					</a>
 				</li>
 				<li class="w-full">
-					<a class=" my-2 px-0 py-0" href="/"
+					<a class=" my-2 px-0 py-0" href="/contacts"
 						><img
 							class="rounded-lg {$page.url.pathname === '/protected/contacts'
 								? 'bg-neutral-content'
