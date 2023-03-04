@@ -61,7 +61,7 @@
 			</div>
 			<div class="divider my-0"></div>
 			<!-- Page content here -->
-			<div class="h-full w-full">
+			<div class="h-[calc(93%)] w-full">
 				<slot />
 			</div>
 		</div>

@@ -1,4 +1,34 @@
 /* Write your global styles here, in PostCSS syntax */
+
+
 @tailwind base;
 @tailwind components;
-@tailwind utilities
+@tailwind utilities;
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #5464a0 #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff00;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #5464a0;
+    border-radius: 10px;
+    border: 3px solid #ffffff00;
+  }
+
+@layer base {
+    [data-nextjs-scroll-focus-boundary] {
+      display: contents;
+    }
+  }

@@ -1,15 +1,33 @@
 <script>
 	export let data;
-	const tableHeaders = ['name','email','department','phone','ext','region','title','notes'];
-	//console.log(`data is:`, data.contacts);
+	const tableHeaders = ['name', 'email', 'department', 'phone', 'ext', 'region', 'title', 'notes'];
+	$: searchValue = '';
+	let searchResults = [];
+	function sortData(search) {
+		searchResults = [];
+		data.contacts.forEach((item) => {
+			for (const key in item) {
+				if (item[key].toString().toLowerCase().includes(search.toLowerCase())) {
+					searchResults = [...searchResults, item];
+					break;
+				}
+			}
+		});
+	}
+	$: sortData(searchValue);
 </script>
 
-<div class="contacts-page w-full flex justify-center">
-	<div class="table-container w-full sm:w-fit flex flex-col items-center">
-		<div class="navbar bg-base-100">
+<div class="contacts-page flex justify-center h-full w-fit 2xl:w-full">
+	<div class="table-container w-fit flex flex-col">
+		<div class="navbar bg-base-100 sticky w-screen sm:w-full">
 			<div class="flex-1">
 				<div class="form-control">
-					<input type="text" placeholder="Search" class="input input-bordered" />
+					<input
+						type="text"
+						placeholder="Search"
+						class="input input-bordered"
+						bind:value={searchValue}
+					/>
 				</div>
 			</div>
 			<div class="flex-none gap-2">
@@ -18,38 +36,25 @@
 				</div>
 			</div>
 		</div>
-		<div class="overflow-x-auto w-full sm:w-fit">
-			<table class="table table-zebra w-full">
+		<div class="w-full sm:w-fit overflow-auto">
+			<table class="table table-zebra">
 				<!-- head -->
 				<thead>
 					<tr>
 						{#each tableHeaders as header}
-							<th>{header}</th>
+							<td>{header}</td>
 						{/each}
 					</tr>
 				</thead>
 				<tbody>
 					<!-- row 1 -->
-					<tr>
-						<th>1</th>
-						<td>Cy Ganderton</td>
-						<td>Quality Control Specialist</td>
-						<td>Blue</td>
-					</tr>
-					<!-- row 2 -->
-					<tr>
-						<th>2</th>
-						<td>Hart Hagerty</td>
-						<td>Desktop Support Technician</td>
-						<td>Purple</td>
-					</tr>
-					<!-- row 3 -->
-					<tr>
-						<th>3</th>
-						<td>Brice Swyre</td>
-						<td>Tax Accountant</td>
-						<td>Red</td>
-					</tr>
+					{#each searchResults as contact}
+						<tr class="hover">
+							{#each tableHeaders as header}
+								<td class={header == 'notes' ? '' : ''}>{contact[header]}</td>
+							{/each}
+						</tr>
+					{/each}
 				</tbody>
 			</table>
 		</div>
