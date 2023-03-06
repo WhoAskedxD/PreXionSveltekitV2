@@ -32,6 +32,7 @@
 				</div>
 			</div>
 			<div class="flex-none gap-2">
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<div class=" btn btn-primary" on:click={() => (salesMapToggle = !salesMapToggle)}>
 					<button >Sales Maps</button>
 				</div>

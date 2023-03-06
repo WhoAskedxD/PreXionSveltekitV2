@@ -9,7 +9,7 @@
 {#if data.user}
 	<div class="drawer drawer-mobile">
 		<input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
-		<div class="drawer-content flex flex-col items-center justify-center">
+		<div class="drawer-content flex flex-col items-center justify-center ">
 			<!-- NavBar content here -->
 			<div class="navbar bg-base-100">
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -61,7 +61,7 @@
 			</div>
 			<div class="divider my-0"></div>
 			<!-- Page content here -->
-			<div class="h-[calc(93%)] w-full">
+			<div class="h-[calc(90%)] w-full">
 				<slot />
 			</div>
 		</div>
