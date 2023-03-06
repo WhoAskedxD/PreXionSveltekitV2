@@ -2,6 +2,7 @@
 	export let data;
 	const tableHeaders = ['name', 'email', 'department', 'phone', 'ext', 'region', 'title', 'notes'];
 	$: searchValue = '';
+	$: salesMapToggle = false;
 	let searchResults = [];
 	function sortData(search) {
 		searchResults = [];
@@ -32,31 +33,36 @@
 			</div>
 			<div class="flex-none gap-2">
 				<div class=" btn btn-primary">
-					<button>Sales Maps</button>
+					<button on:click={() => (salesMapToggle = !salesMapToggle)}>Sales Maps</button>
 				</div>
 			</div>
 		</div>
-		<div class="w-full sm:w-fit overflow-auto">
-			<table class="table table-zebra">
-				<!-- head -->
-				<thead>
-					<tr>
-						{#each tableHeaders as header}
-							<td>{header}</td>
-						{/each}
-					</tr>
-				</thead>
-				<tbody>
-					<!-- row 1 -->
-					{#each searchResults as contact}
-						<tr class="hover">
+		{#if !salesMapToggle}
+			<!-- content here -->
+			<div class="w-full sm:w-fit overflow-auto">
+				<table class="table table-zebra">
+					<!-- head -->
+					<thead>
+						<tr class='sticky top-0'>
 							{#each tableHeaders as header}
-								<td class={header == 'notes' ? '' : ''}>{contact[header]}</td>
+								<td>{header}</td>
 							{/each}
 						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+					</thead>
+					<tbody>
+						<!-- row 1 -->
+						{#each searchResults as contact}
+							<tr class="hover">
+								{#each tableHeaders as header}
+									<td class={header == 'notes' ? '' : ''}>{contact[header]}</td>
+								{/each}
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		{:else}
+			<img src='/images/PreXion_Sales_Territories_December_2022.jpg' alt="sales map" />
+		{/if}
 	</div>
 </div>

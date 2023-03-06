@@ -67,7 +67,7 @@
 		</div>
 		<div class="drawer-side">
 			<label for="my-drawer-2" class="drawer-overlay" />
-			<ul class="menu p-4 w-48 lg:w-24 bg-neutral text-neutral-content {drawerToggle ? 'sm:hidden':''}">
+			<ul class="menu p-4 w-48 lg:w-24 bg-neutral text-neutral-content {drawerToggle ? '':'sm:hidden'}">
 				<!-- Sidebar content here -->
 				<li class="w-full">
 					<a class=" my-2 px-0 py-0" href="/">
