@@ -1,5 +1,5 @@
 import preprocess from "svelte-preprocess";
-//import adapter from '@sveltejs/adapter-node'; use when building for prod.
+//import adapter from '@sveltejs/adapter-node'; //use when building for prod.
 import adapter from '@sveltejs/adapter-auto';
 
 
