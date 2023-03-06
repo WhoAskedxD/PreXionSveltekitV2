@@ -32,8 +32,8 @@
 				</div>
 			</div>
 			<div class="flex-none gap-2">
-				<div class=" btn btn-primary">
-					<button on:click={() => (salesMapToggle = !salesMapToggle)}>Sales Maps</button>
+				<div class=" btn btn-primary" on:click={() => (salesMapToggle = !salesMapToggle)}>
+					<button >Sales Maps</button>
 				</div>
 			</div>
 		</div>
