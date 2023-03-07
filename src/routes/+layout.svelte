@@ -9,7 +9,7 @@
 {#if data.user}
 	<div class="drawer drawer-mobile">
 		<input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
-		<div class="drawer-content flex flex-col items-center justify-center ">
+		<div class="drawer-content flex flex-col">
 			<!-- NavBar content here -->
 			<div class="navbar bg-base-100">
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -75,7 +75,7 @@
 					</a>
 				</li>
 				<li class="w-full">
-					<a class=" my-2 px-0 py-0" href="/contacts"
+					<a class="my-2 px-0 py-0 justify-center" href="/contacts"
 						><img
 							class="rounded-lg {$page.url.pathname === '/protected/contacts'
 								? 'bg-neutral-content'
