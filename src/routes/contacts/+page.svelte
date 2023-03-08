@@ -18,10 +18,10 @@
 	$: sortData(searchValue);
 </script>
 
-<div class="contacts-page flex justify-center h-full w-fit 2xl:w-full">
-	<div class="table-container w-fit flex flex-col">
-		<div class="navbar bg-base-100 sticky w-screen sm:w-full">
-			<div class="flex-1">
+<div class="contacts-page flex h-full w-full">
+	<div class="table-container w-full flex flex-col">
+		<div class="navbar bg-base-100 justify-between w-full">
+			<div class="">
 				<div class="form-control">
 					<input
 						type="text"
@@ -34,17 +34,17 @@
 			<div class="flex-none gap-2">
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<div class=" btn btn-primary" on:click={() => (salesMapToggle = !salesMapToggle)}>
-					<button >Sales Maps</button>
+					<button>Sales Maps</button>
 				</div>
 			</div>
 		</div>
 		{#if !salesMapToggle}
 			<!-- content here -->
-			<div class="w-full sm:w-fit overflow-auto">
-				<table class="table table-zebra">
+			<div class="overflow-auto mx-auto w-full 2xl:w-fit">
+				<table class="table contents table-zebra">
 					<!-- head -->
 					<thead>
-						<tr class='sticky top-0'>
+						<tr class="">
 							{#each tableHeaders as header}
 								<td>{header}</td>
 							{/each}
@@ -63,7 +63,9 @@
 				</table>
 			</div>
 		{:else}
-			<img src='/images/PreXion_Sales_Territories_December_2022.jpg' alt="sales map" />
+			<div class="image-container w-full h-full">
+				<img class='mx-auto' src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="sales map" />
+			</div>
 		{/if}
 	</div>
 </div>
