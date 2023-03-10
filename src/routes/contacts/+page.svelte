@@ -41,7 +41,7 @@
 		{#if !salesMapToggle}
 			<!-- content here -->
 			<div class="overflow-auto mx-auto w-full 2xl:w-fit">
-				<table class="table contents table-zebra">
+				<table class="table table-zebra">
 					<!-- head -->
 					<thead>
 						<tr class="">
