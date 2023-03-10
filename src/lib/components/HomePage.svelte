@@ -26,10 +26,10 @@
 					</button>
 				</div>
 			</div>
-			<div class="card-elements max-h-full overflow-y-scroll">
-				<div class="card w-96 glass my-2">
+			<div class="card-elements max-h-full overflow-y-scroll" id='card'>
+				<div class="card-placeholder w-96 my-2 rounded-xl">
 					<figure>
-						<img src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
+						<img class='rounded-xl' src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
 					</figure>
 					<div class="card-body">
 						<h2 class="card-title">Life hack</h2>
@@ -39,9 +39,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="card w-96 glass my-2">
+				<div class="card-placeholder w-96 my-2 rounded-xl">
 					<figure>
-						<img src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
+						<img class='rounded-xl' src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
 					</figure>
 					<div class="card-body">
 						<h2 class="card-title">Life hack</h2>
@@ -51,9 +51,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="card w-96 glass my-2">
+				<div class="card-placeholder w-96 my-2 rounded-xl">
 					<figure>
-						<img src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
+						<img class='rounded-xl' src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
 					</figure>
 					<div class="card-body">
 						<h2 class="card-title">Life hack</h2>
