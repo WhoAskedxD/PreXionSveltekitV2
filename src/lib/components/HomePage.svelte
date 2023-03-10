@@ -4,10 +4,10 @@
 
 <div class="home-page h-full w-full flex flex-col">
 	<div class="tasks-container flex flex-row max-h-full space-x-4 overflow-scroll">
-		<div class="card-container max-h-full flex flex-col space-y-4 ">
-			<div class="card-title-container flex flex-row justify-between mx-2 items-center">
+		<div class="card-container max-h-full flex flex-col bg-slate-200 rounded-lg">
+			<div class="card-title-container flex flex-row justify-between mx-2 items-center ">
 				<div class="card-title flex-1 h-fit">
-					<input type="text" class="input rounded-sm h-fit pl-2 pr-0 w-full" value="value" />
+					<input type="text" class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full" value="value" />
 				</div>
 				<div class="flex-none">
 					<button class="btn btn-square btn-ghost">
@@ -26,7 +26,7 @@
 					</button>
 				</div>
 			</div>
-			<div class="card-elements max-h-full overflow-scroll">
+			<div class="card-elements max-h-full overflow-y-scroll">
 				<div class="card w-96 glass my-2">
 					<figure>
 						<img src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
@@ -64,8 +64,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="card-footer-container w-full flex flex-row justify-between mx-2 items-center">
-				<button class="">+ Add Card</button>
+			<div class="card-footer-container flex flex-row justify-between mx-2 my-2 items-center">
+				<button class="pl-4">+ Add Card</button>
 			</div>
 		</div>
 		<div class="card-container max-h-full flex flex-col space-y-4">
