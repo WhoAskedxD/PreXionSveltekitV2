@@ -14,10 +14,10 @@ export const actions = {
 			}
 		} catch (err) {
 			// console.log('Error: ', err.data);
-			if(err.data){
-				return fail(400,{
-					fail:err.data.message
-				})
+			if (err.data) {
+				return fail(400, {
+					fail: err.data.message
+				});
 			}
 			throw error(500, 'Something went wrong logging in');
 		}
@@ -25,23 +25,23 @@ export const actions = {
 	},
 	register: async ({ locals, request }) => {
 		const body = Object.fromEntries(await request.formData());
-		let username = (body.name.split(' ').join('')).toLowerCase();
-		const {confirm_password:passwordConfirm } = body
+		let username = body.name.split(' ').join('').toLowerCase();
+		const { confirm_password: passwordConfirm } = body;
 		try {
-			await locals.pb.collection('users').create({ username,passwordConfirm, ...body });
+			await locals.pb.collection('users').create({ username, passwordConfirm, ...body });
 			await locals.pb.collection('users').requestVerification(body.email);
 		} catch (err) {
-			if (err.data.data){
-				const {email = '',password = '',passwordConfirm = ''} = err.data.data
-				return fail(400,{
+			if (err.data.data) {
+				const { email = '', password = '', passwordConfirm = '' } = err.data.data;
+				return fail(400, {
 					error: email.message || password.message || passwordConfirm.message
-				})
+				});
 			}
 			throw error(500, `Something went wrong ${JSON.stringify(err.data)}`);
 		}
 		return {
-			registered:true
-		}
+			registered: true
+		};
 	},
 	resetPassword: async ({ request, locals }) => {
 		const body = Object.fromEntries(await request.formData());
@@ -55,12 +55,15 @@ export const actions = {
 			console.log('Error: ', err);
 			throw error(500, 'Something went wrong');
 		}
-	},
+	}
 };
 
-export async function load({locals}) {
-	const taskData = await fetch(`http://192.168.1.100:5000/api/collections/task/records/?filter=(user=${locals.user.id})`); 
+export async function load({ locals }) {
+	const response = await locals.pb.collection('task').getList(1, 50, {
+		filter: `user="${locals.user?.id}"`
+	});
+	const taskData = structuredClone(response.items);
 	return {
-		task: structuredClone(taskData)
+		task: taskData
 	};
-};
+}
