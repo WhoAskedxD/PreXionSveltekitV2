@@ -57,3 +57,10 @@ export const actions = {
 		}
 	},
 };
+
+export async function load({locals}) {
+	const taskData = await fetch(`http://192.168.1.100:5000/api/collections/task/records/?filter=(user=${locals.user.id})`); 
+	return {
+		task: structuredClone(taskData)
+	};
+};
