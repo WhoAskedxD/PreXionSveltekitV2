@@ -1,21 +1,16 @@
 <script>
 	import { page } from '$app/stores';
-	const taskData = $page.data?.task;
-	const grouped = taskData.reduce((x, y) => {
-		(x[y.board] = x[y.board] || []).push(y);
-		return x;
-	}, []);
-	const value = Object.values(grouped);
-	const title = grouped.title;
-	const imageFiles = [".jpg",".png",".svg",".gif"]
-	// title.forEach(element => {
-	// 	element.files.forEach(item => {
-	// 		console.log(imageFiles.some( str => item.includes(str)),item)
-	// 	});
-	// });
-	console.log('grouped', grouped.title);
-	// console.log("taskData",taskData);
-	// console.log("test",value)
+	const boardData = $page.data?.boards;
+	// const taskData = $page.data?.task;
+	// const groupedData = taskData.reduce((x, y) => {
+	// 	(x[y.board] = x[y.board] || []).push(y);
+	// 	return x;
+	// }, []);
+	// const boards = Object.values(groupedData);
+	// const imageFiles = [".jpg",".png",".svg",".gif"]
+	// console.log('taskData', taskData);
+	// console.log("groupedData",groupedData)
+	console.log("boards",boardData)
 </script>
 
 <div class="home-page h-full w-full flex flex-col">
@@ -88,14 +83,14 @@
 				<button class="pl-4">+ Add Card</button>
 			</div>
 		</div>
-		{#each Object.values(grouped) as task}
+		{#each boardData as board}
 			<div class="card-container h-fit max-h-full flex flex-col bg-slate-200 rounded-lg">
 				<div class="card-title-container flex flex-row justify-between mx-2 items-center ">
 					<div class="card-title flex-1 h-fit">
 						<input
 							type="text"
 							class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full"
-							value={task[0].board}
+							value={board.title}
 						/>
 					</div>
 					<div class="flex-none">
@@ -128,11 +123,10 @@
 							</div>
 						</div>
 					</div>
-					{#each task as item}
+					<!-- {#each board as card}
 						<div class="card w-96 glass">
-							{#if item.files.length >= 1}
-								<!-- content here -->
-								<p>{item.files}</p>
+							{#if card.files.length >= 1}
+								<p>{card.files}</p>
 								<figure>
 									<img src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
 								</figure>
@@ -145,7 +139,7 @@
 								</div>
 							</div>
 						</div>
-					{/each}
+					{/each} -->
 				</div>
 				<div class="card-footer-container flex flex-row justify-between mx-2 my-2 items-center">
 					<button class="pl-4">+ Add Card</button>

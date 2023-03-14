@@ -59,15 +59,12 @@ export const actions = {
 };
 
 export async function load({ locals }) {
-	const response = await locals.pb.collection('task').getList(1, 50, {
-		filter: `user="${locals.user?.id}"`
+	const response = await locals.pb.collection('boards').getFullList(200,{
+		filter:`assgined~"${locals.user.id}"`,
+		expand:'tasks'
 	});
-	const test = await locals.pb.collection('task').getFullList(200,{
-		expand:'files,comments'
-	})
-	console.log(test)
-	const taskData = structuredClone(response.items);
+	const boardData = structuredClone(response);
 	return {
-		task: taskData
+		boards: boardData
 	};
 }
