@@ -6,7 +6,14 @@
 		return x;
 	}, []);
 	const value = Object.values(grouped);
-	// console.log("grouped",grouped);
+	const title = grouped.title;
+	const imageFiles = [".jpg",".png",".svg",".gif"]
+	// title.forEach(element => {
+	// 	element.files.forEach(item => {
+	// 		console.log(imageFiles.some( str => item.includes(str)),item)
+	// 	});
+	// });
+	console.log('grouped', grouped.title);
 	// console.log("taskData",taskData);
 	// console.log("test",value)
 </script>
@@ -121,6 +128,24 @@
 							</div>
 						</div>
 					</div>
+					{#each task as item}
+						<div class="card w-96 glass">
+							{#if item.files.length >= 1}
+								<!-- content here -->
+								<p>{item.files}</p>
+								<figure>
+									<img src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
+								</figure>
+							{/if}
+							<div class="card-body">
+								<h2 class="card-title">Life hack</h2>
+								<p>How to park your car at your garage?</p>
+								<div class="card-actions justify-end">
+									<button class="btn btn-primary">Learn now!</button>
+								</div>
+							</div>
+						</div>
+					{/each}
 				</div>
 				<div class="card-footer-container flex flex-row justify-between mx-2 my-2 items-center">
 					<button class="pl-4">+ Add Card</button>
