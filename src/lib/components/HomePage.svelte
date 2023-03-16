@@ -1,10 +1,8 @@
 <script>
 	import { getImageURL } from '$lib/utils.js';
-	import { page } from '$app/stores';
-	const boardData = $page.data?.boards;
-	const taskData = boardData.map((key) => key.expand.tasks);
-	console.log('boardData', boardData);
-	console.log('tasks', taskData);
+	export let data;
+	const boardData = data?.boards;
+	console.log(data);
 </script>
 
 <div class="home-page h-full w-full flex flex-col">
@@ -35,7 +33,7 @@
 					</button>
 				</div>
 			</div>
-			<div class="card-elements max-h-full overflow-y-auto overflow-x-hidden" id="card">
+			<div class="card-elements max-h-full overflow-y-auto overflow-x-hidden scrollbar-hide" id="card">
 				<div class="card w-96 glass">
 					<figure>
 						<img src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
@@ -78,17 +76,19 @@
 			</div>
 		</div> -->
 		{#each boardData as board}
-			<div class="board-container h-fit max-h-full flex flex-col bg-slate-200 rounded-lg">
-				<div class="board-title-container flex flex-row justify-between mx-2 items-center ">
+			<div
+				class="board-container h-fit max-h-full flex flex-col rounded-md bg-primary-content w-80 py-2"
+			>
+				<div class="board-title-container flex flex-row justify-between mx-2 items-center">
 					<div class="board-title flex-1 h-fit">
 						<input
 							type="text"
-							class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full"
+							class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
 							value={board.title}
 						/>
 					</div>
 					<div class="flex-none">
-						<button class="btn btn-square btn-ghost">
+						<button class="btn btn-sm btn-ghost">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
@@ -104,31 +104,31 @@
 						</button>
 					</div>
 				</div>
-				<div class="board-elements max-h-full space-y-4 overflow-y-auto overflow-x-hidden px-2" id="card">
-					{#each board.expand.tasks as card}
-						<div class="card w-96 bg-base-100">
-							<!-- {#if tasks.files.length >= 1}
-								{#each tasks.expand.files as file}
-									{#if file.display}
-										<figure>
-											<img src={getImageURL(file.collectionId, file.id, file.file)} alt="card pic!" />
-										</figure>
-									{/if}
-								{/each}
-							{/if} -->
-							<div class="card-body">
-								<h2 class="card-title">{card.title}</h2>
-								<p>{card.notes}</p>
-								<!-- <div class="card-actions justify-end">
+				<div class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded">
+					<button class="pl-4 ">+ Add Task</button>
+				</div>
+				<div
+					class="board-elements max-h-full space-y-2 overflow-y-auto overflow-x-hidden px-2"
+					id="card"
+				>
+					{#each board.expand.tasks as task}
+						<div class="card bg-base-100 drop-shadow hover:drop-shadow-xl">
+							{#if task.image}
+								<figure>
+									<img src={getImageURL(task.collectionId, task.id, task.image)} alt="task pic!" />
+								</figure>
+							{/if}
+							<div class="card-body cursor-pointer">
+								<h2 class="card-title">{task.title}</h2>
+								<p>{task.notes}</p>
+								<!-- <div class="task-actions justify-end">
 									<button class="btn btn-primary">Learn now!</button>
 								</div> -->
 							</div>
 						</div>
 					{/each}
 				</div>
-				<div class="board-footer-container flex flex-row justify-between mx-2 my-2 items-center">
-					<button class="pl-4">+ Add Card</button>
-				</div>
+				
 			</div>
 		{/each}
 	</div>

@@ -11,7 +11,7 @@
 		<input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
 		<div class="drawer-content flex flex-col">
 			<!-- NavBar content here -->
-			<div class="navbar bg-base-100">
+			<div class="navbar">
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<label for="my-drawer-2" class="btn btn-square btn-ghost" on:click={() => (drawerToggle =!drawerToggle)}>
 					<svg

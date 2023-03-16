@@ -5,7 +5,7 @@
 </script>
 
 {#if data.user}
-	<HomePage ></HomePage>
+	<HomePage data={data}></HomePage>
 {:else}
 	<LandingPage />
 {/if}

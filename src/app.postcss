@@ -26,9 +26,13 @@
     border-radius: 10px;
     border: 3px solid #ffffff00;
   }
+  /* For Webkit-based browsers (Chrome, Safari and Opera) */
+  .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+  }
 
-@layer base {
-    [data-nextjs-scroll-focus-boundary] {
-      display: contents;
-    }
+  /* For IE, Edge and Firefox */
+  .scrollbar-hide {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
   }
