@@ -1,16 +1,10 @@
 <script>
+	import { getImageURL } from '$lib/utils.js';
 	import { page } from '$app/stores';
 	const boardData = $page.data?.boards;
-	// const taskData = $page.data?.task;
-	// const groupedData = taskData.reduce((x, y) => {
-	// 	(x[y.board] = x[y.board] || []).push(y);
-	// 	return x;
-	// }, []);
-	// const boards = Object.values(groupedData);
-	// const imageFiles = [".jpg",".png",".svg",".gif"]
-	// console.log('taskData', taskData);
-	// console.log("groupedData",groupedData)
-	console.log("boards",boardData)
+	const taskData = boardData.map((key) => key.expand.tasks);
+	console.log('boardData', boardData);
+	console.log('tasks', taskData);
 </script>
 
 <div class="home-page h-full w-full flex flex-col">
@@ -111,35 +105,27 @@
 					</div>
 				</div>
 				<div class="card-elements max-h-full overflow-y-scroll" id="card">
-					<div class="card w-96 glass">
-						<figure>
-							<img src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
-						</figure>
-						<div class="card-body">
-							<h2 class="card-title">Life hack</h2>
-							<p>How to park your car at your garage?</p>
-							<div class="card-actions justify-end">
-								<button class="btn btn-primary">Learn now!</button>
-							</div>
-						</div>
-					</div>
-					<!-- {#each board as card}
+					{#each board.expand.tasks as tasks}
 						<div class="card w-96 glass">
-							{#if card.files.length >= 1}
-								<p>{card.files}</p>
-								<figure>
-									<img src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
-								</figure>
+							{#if tasks.files.length >= 1}
+								{#each tasks.expand.files as file}
+									{#if file.display}
+										<figure>
+											<img src={getImageURL(file.collectionId, file.id, file.file)} alt="car!" />
+										</figure>
+									{/if}
+								{/each}
 							{/if}
+
 							<div class="card-body">
-								<h2 class="card-title">Life hack</h2>
+								<h2 class="card-title">{tasks.title}</h2>
 								<p>How to park your car at your garage?</p>
 								<div class="card-actions justify-end">
 									<button class="btn btn-primary">Learn now!</button>
 								</div>
 							</div>
 						</div>
-					{/each} -->
+					{/each}
 				</div>
 				<div class="card-footer-container flex flex-row justify-between mx-2 my-2 items-center">
 					<button class="pl-4">+ Add Card</button>
