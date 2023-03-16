@@ -8,8 +8,8 @@
 </script>
 
 <div class="home-page h-full w-full flex flex-col">
-	<div class="tasks-container flex flex-row max-h-full space-x-4 overflow-scroll">
-		<div class="card-container h-fit max-h-full flex flex-col bg-slate-200 rounded-lg">
+	<div class="tasks-container flex flex-row h-full space-x-4 overflow-scroll ml-2">
+		<!-- <div class="card-container h-fit max-h-full flex flex-col bg-slate-200 rounded-lg">
 			<div class="card-title-container flex flex-row justify-between mx-2 items-center ">
 				<div class="card-title flex-1 h-fit">
 					<input
@@ -35,7 +35,7 @@
 					</button>
 				</div>
 			</div>
-			<div class="card-elements max-h-full overflow-y-scroll" id="card">
+			<div class="card-elements max-h-full overflow-y-auto overflow-x-hidden" id="card">
 				<div class="card w-96 glass">
 					<figure>
 						<img src="/images/PreXion_Sales_Territories_December_2022.jpg" alt="car!" />
@@ -76,11 +76,11 @@
 			<div class="card-footer-container flex flex-row justify-between mx-2 my-2 items-center">
 				<button class="pl-4">+ Add Card</button>
 			</div>
-		</div>
+		</div> -->
 		{#each boardData as board}
-			<div class="card-container h-fit max-h-full flex flex-col bg-slate-200 rounded-lg">
-				<div class="card-title-container flex flex-row justify-between mx-2 items-center ">
-					<div class="card-title flex-1 h-fit">
+			<div class="board-container h-fit max-h-full flex flex-col bg-slate-200 rounded-lg">
+				<div class="board-title-container flex flex-row justify-between mx-2 items-center ">
+					<div class="board-title flex-1 h-fit">
 						<input
 							type="text"
 							class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full"
@@ -104,30 +104,29 @@
 						</button>
 					</div>
 				</div>
-				<div class="card-elements max-h-full overflow-y-scroll" id="card">
-					{#each board.expand.tasks as tasks}
-						<div class="card w-96 glass">
-							{#if tasks.files.length >= 1}
+				<div class="board-elements max-h-full space-y-4 overflow-y-auto overflow-x-hidden px-2" id="card">
+					{#each board.expand.tasks as card}
+						<div class="card w-96 bg-base-100">
+							<!-- {#if tasks.files.length >= 1}
 								{#each tasks.expand.files as file}
 									{#if file.display}
 										<figure>
-											<img src={getImageURL(file.collectionId, file.id, file.file)} alt="car!" />
+											<img src={getImageURL(file.collectionId, file.id, file.file)} alt="card pic!" />
 										</figure>
 									{/if}
 								{/each}
-							{/if}
-
+							{/if} -->
 							<div class="card-body">
-								<h2 class="card-title">{tasks.title}</h2>
-								<p>How to park your car at your garage?</p>
-								<div class="card-actions justify-end">
+								<h2 class="card-title">{card.title}</h2>
+								<p>{card.notes}</p>
+								<!-- <div class="card-actions justify-end">
 									<button class="btn btn-primary">Learn now!</button>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					{/each}
 				</div>
-				<div class="card-footer-container flex flex-row justify-between mx-2 my-2 items-center">
+				<div class="board-footer-container flex flex-row justify-between mx-2 my-2 items-center">
 					<button class="pl-4">+ Add Card</button>
 				</div>
 			</div>
