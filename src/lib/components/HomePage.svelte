@@ -1,6 +1,8 @@
 <script>
 	import { getImageURL } from '$lib/utils.js';
 	export let data;
+	let addTask = false;
+	let newTask;
 	const boardData = data?.boards;
 	console.log(data);
 </script>
@@ -104,21 +106,43 @@
 						</button>
 					</div>
 				</div>
-				<div class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded">
-					<button class="pl-4 ">+ Add Task</button>
+				<div
+					class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded"
+				>
+					<button
+						class="pl-4 "
+						on:click={() => {
+							addTask = !addTask;
+						}}>+ Add Task</button
+					>
 				</div>
 				<div
 					class="board-elements max-h-full space-y-2 overflow-y-auto overflow-x-hidden px-2"
 					id="card"
 				>
 					{#each board.expand.tasks as task}
-						<div class="card bg-base-100 drop-shadow hover:drop-shadow-xl">
+						{#if addTask}
+							<div class="card cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl">
+								<div class="card-body">
+									<h2 class="card-title">
+										<input
+											type="text"
+											class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
+											bind:value={newTask.title}
+											placeholder="Enter a task name"
+										/>
+									</h2>
+									<p>{task.notes}</p>
+								</div>
+							</div>
+						{/if}
+						<div class="card cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl">
 							{#if task.image}
 								<figure>
 									<img src={getImageURL(task.collectionId, task.id, task.image)} alt="task pic!" />
 								</figure>
 							{/if}
-							<div class="card-body cursor-pointer">
+							<div class="card-body">
 								<h2 class="card-title">{task.title}</h2>
 								<p>{task.notes}</p>
 								<!-- <div class="task-actions justify-end">
@@ -128,7 +152,6 @@
 						</div>
 					{/each}
 				</div>
-				
 			</div>
 		{/each}
 	</div>
