@@ -1,10 +1,19 @@
 <script>
-	import { getImageURL } from '$lib/utils.js';
+	import { getImageURL, clickOutside } from '$lib/utils.js';
 	export let data;
 	let addTask = false;
-	let newTask;
+	let newTask = {};
 	const boardData = data?.boards;
-	console.log(data);
+	const sample = boardData[0].expand.tasks;
+	// const newSample = [...sample,{assigned:data.user.id,title:'testing'}]
+	// console.log(newSample)
+	let boardReference ;
+	function init(el) {
+		el.focus();
+	}
+	function handleClickOutside(event) {
+		addTask = false;
+	}
 </script>
 
 <div class="home-page h-full w-full flex flex-col">
@@ -77,9 +86,10 @@
 				<button class="pl-4">+ Add Card</button>
 			</div>
 		</div> -->
-		{#each boardData as board}
+		{#each boardData as board, boardIndex}
 			<div
 				class="board-container h-fit max-h-full flex flex-col rounded-md bg-primary-content w-80 py-2"
+				id={`board_${boardIndex}`}
 			>
 				<div class="board-title-container flex flex-row justify-between mx-2 items-center">
 					<div class="board-title flex-1 h-fit">
@@ -107,12 +117,14 @@
 					</div>
 				</div>
 				<div
-					class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded"
+					class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded dropdown"
 				>
 					<button
 						class="pl-4 "
-						on:click={() => {
+						id={`board_${boardIndex}`}
+						on:click={(e) => {
 							addTask = !addTask;
+							boardReference = e.target.id;
 						}}>+ Add Task</button
 					>
 				</div>
@@ -120,22 +132,23 @@
 					class="board-elements max-h-full space-y-2 overflow-y-auto overflow-x-hidden px-2"
 					id="card"
 				>
-					{#each board.expand.tasks as task}
-						{#if addTask}
-							<div class="card cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl">
-								<div class="card-body">
-									<h2 class="card-title">
-										<input
-											type="text"
-											class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
-											bind:value={newTask.title}
-											placeholder="Enter a task name"
-										/>
-									</h2>
-									<p>{task.notes}</p>
-								</div>
+					{#if addTask && boardReference == `board_${boardIndex}`}
+						<div class="card cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl" use:clickOutside on:click_outside={handleClickOutside} id={`new Card`}>
+							<div class="card-body">
+								<h2 class="card-title">
+									<input
+										use:init
+										type="text"
+										class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
+										placeholder="Enter new task here"
+										bind:value={newTask.title}
+									/>
+								</h2>
+								<p>test</p>
 							</div>
-						{/if}
+						</div>
+					{/if}
+					{#each board.expand.tasks as task}
 						<div class="card cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl">
 							{#if task.image}
 								<figure>
