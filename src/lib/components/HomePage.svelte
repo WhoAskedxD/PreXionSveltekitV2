@@ -7,7 +7,6 @@
 	let addTask = false;
 	let boardData = data?.boards;
 	const sample = boardData[0].expand.tasks;
-	// const newSample = [...sample,{assigned:data.user.id,title:'testing'}]
 	console.log(data);
 	let boardReference;
 	function init(el) {
@@ -18,11 +17,11 @@
 	}
 	$:if (form?.success){
 		console.log(`reading form data sucessfully : `,form.sampleData);
-		const findTask = boardData.filter((board) =>{
+		const editIndex = boardData.findIndex((board) => {
 			return board.id == form.sampleData.id
 		})
 		addTask = false;
-		console.log(findTask);
+		boardData[editIndex].expand.tasks = [...boardData[editIndex].expand.tasks,form.sampleData]
 	}
 </script>
 
@@ -132,7 +131,6 @@
 						id={board.id}
 						on:click={(e) => {
 							addTask = !addTask;
-							console.log(e)
 							boardReference = e.target.id;
 						}}>+ Add Task</button
 					>
