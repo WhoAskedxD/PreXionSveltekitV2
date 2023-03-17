@@ -15,13 +15,13 @@
 	function handleClickOutside(event) {
 		addTask = false;
 	}
-	$:if (form?.success){
-		console.log(`reading form data sucessfully : `,form.sampleData);
+	$: if (form?.success) {
+		console.log(`reading form data sucessfully : `, form.sampleData);
 		const editIndex = boardData.findIndex((board) => {
-			return board.id == form.sampleData.id
-		})
+			return board.id == form.sampleData.id;
+		});
 		addTask = false;
-		boardData[editIndex].expand.tasks = [...boardData[editIndex].expand.tasks,form.sampleData]
+		boardData[editIndex].expand.tasks = [...boardData[editIndex].expand.tasks, form.sampleData];
 	}
 </script>
 
@@ -97,7 +97,7 @@
 		</div> -->
 		{#each boardData as board, boardIndex}
 			<div
-				class="board-container h-fit max-h-full flex flex-col rounded-md bg-primary-content w-80 py-2" 
+				class="board-container h-fit max-h-full flex flex-col rounded-md bg-primary-content w-80 py-2"
 				id={`board_${boardIndex}`}
 			>
 				<div class="board-title-container flex flex-row justify-between mx-2 items-center">
@@ -125,7 +125,9 @@
 						</button>
 					</div>
 				</div>
-				<div class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded dropdown">
+				<div
+					class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded dropdown"
+				>
 					<button
 						class="pl-4 "
 						id={board.id}
@@ -140,12 +142,7 @@
 					id="card"
 				>
 					{#if addTask && boardReference == board.id}
-						<form
-							action="?/createTask"
-							method="POST"
-							enctype="multipart/form-data"
-							use:enhance
-						>
+						<form action="?/createTask" method="POST" enctype="multipart/form-data" use:enhance>
 							<div
 								class="card card-compact cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl"
 								use:clickOutside
@@ -186,7 +183,13 @@
 							{/if}
 							<div class="card-body" taskid={task.id} boardId={board.id}>
 								<h2 class="card-title" taskid={task.id} boardId={board.id}>{task.title}</h2>
-								<p>{task.notes}</p>
+								<p>
+									{#if task.assigned?.length >=1}
+										{#each task.expand?.assigned as user}
+											{`${user.name} `}
+										{/each}
+									{/if}
+								</p>
 								<!-- <div class="task-actions justify-end">
 									<button class="btn btn-primary">Learn now!</button>
 								</div> -->

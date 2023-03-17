@@ -69,7 +69,7 @@ export const actions = {
 export async function load({ locals }) {
 	const response = await locals.pb.collection('boards').getFullList(200,{
 		filter:`assigned~"${locals.user?.id}" || user="${locals.user?.id}"`,
-		expand:'tasks,assigned,tasks.files'
+		expand:'tasks,tasks.files,tasks.assigned'
 	});
 	const boardData = structuredClone(response);
 	return {
