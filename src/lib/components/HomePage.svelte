@@ -1,18 +1,28 @@
 <script>
 	import { getImageURL, clickOutside } from '$lib/utils.js';
+	import { invalidateAll } from '$app/navigation';
+	import { enhance, applyAction } from '$app/forms';
 	export let data;
+	export let form;
 	let addTask = false;
-	let newTask = {};
-	const boardData = data?.boards;
+	let boardData = data?.boards;
 	const sample = boardData[0].expand.tasks;
 	// const newSample = [...sample,{assigned:data.user.id,title:'testing'}]
-	// console.log(newSample)
-	let boardReference ;
+	console.log(data);
+	let boardReference;
 	function init(el) {
 		el.focus();
 	}
 	function handleClickOutside(event) {
 		addTask = false;
+	}
+	$:if (form?.success){
+		console.log(`reading form data sucessfully : `,form.sampleData);
+		const findTask = boardData.filter((board) =>{
+			return board.id == form.sampleData.id
+		})
+		addTask = false;
+		console.log(findTask);
 	}
 </script>
 
@@ -88,7 +98,7 @@
 		</div> -->
 		{#each boardData as board, boardIndex}
 			<div
-				class="board-container h-fit max-h-full flex flex-col rounded-md bg-primary-content w-80 py-2"
+				class="board-container h-fit max-h-full flex flex-col rounded-md bg-primary-content w-80 py-2" 
 				id={`board_${boardIndex}`}
 			>
 				<div class="board-title-container flex flex-row justify-between mx-2 items-center">
@@ -116,14 +126,13 @@
 						</button>
 					</div>
 				</div>
-				<div
-					class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded dropdown"
-				>
+				<div class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded dropdown">
 					<button
 						class="pl-4 "
-						id={`board_${boardIndex}`}
+						id={board.id}
 						on:click={(e) => {
 							addTask = !addTask;
+							console.log(e)
 							boardReference = e.target.id;
 						}}>+ Add Task</button
 					>
@@ -132,31 +141,53 @@
 					class="board-elements max-h-full space-y-2 overflow-y-auto overflow-x-hidden px-2"
 					id="card"
 				>
-					{#if addTask && boardReference == `board_${boardIndex}`}
-						<div class="card cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl" use:clickOutside on:click_outside={handleClickOutside} id={`new Card`}>
-							<div class="card-body">
-								<h2 class="card-title">
-									<input
-										use:init
-										type="text"
-										class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
-										placeholder="Enter new task here"
-										bind:value={newTask.title}
-									/>
-								</h2>
-								<p>test</p>
+					{#if addTask && boardReference == board.id}
+						<form
+							action="?/createTask"
+							method="POST"
+							enctype="multipart/form-data"
+							use:enhance
+						>
+							<div
+								class="card card-compact cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl"
+								use:clickOutside
+								on:click_outside={handleClickOutside}
+								id={`new Card`}
+							>
+								<div class="card-body">
+									<h2 class="card-title">
+										<input type="hidden" name="id" value={board.id} />
+										<input
+											name="title"
+											type="text"
+											class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
+											placeholder="Enter new task here"
+											value=""
+											use:init
+										/>
+									</h2>
+									<p>test</p>
+								</div>
 							</div>
-						</div>
+						</form>
 					{/if}
-					{#each board.expand.tasks as task}
-						<div class="card cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl">
+					{#each board.expand?.tasks as task}
+						<div
+							class="card card-compact cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl"
+							taskid={task.id}
+							boardId={board.id}
+						>
 							{#if task.image}
 								<figure>
-									<img src={getImageURL(task.collectionId, task.id, task.image)} alt="task pic!" />
+									<img
+										src={getImageURL(task.collectionId, task.id, task.image)}
+										alt="task pic!"
+										id={task.id}
+									/>
 								</figure>
 							{/if}
-							<div class="card-body">
-								<h2 class="card-title">{task.title}</h2>
+							<div class="card-body" taskid={task.id} boardId={board.id}>
+								<h2 class="card-title" taskid={task.id} boardId={board.id}>{task.title}</h2>
 								<p>{task.notes}</p>
 								<!-- <div class="task-actions justify-end">
 									<button class="btn btn-primary">Learn now!</button>

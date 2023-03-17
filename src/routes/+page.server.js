@@ -55,6 +55,14 @@ export const actions = {
 			console.log('Error: ', err);
 			throw error(500, 'Something went wrong');
 		}
+	},
+	createTask: async ({ request, locals}) => {
+		const body = Object.fromEntries(await request.formData());
+		console.log(`body: `,body)
+		return {
+			success:true,
+			sampleData: body
+		}
 	}
 };
 
