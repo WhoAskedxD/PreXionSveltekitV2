@@ -67,12 +67,18 @@ export const actions = {
 };
 
 export async function load({ locals }) {
-	const response = await locals.pb.collection('boards').getFullList(200,{
+	const boards = await locals.pb.collection('boards').getFullList(200,{
 		filter:`assigned~"${locals.user?.id}" || user="${locals.user?.id}"`,
 		expand:'tasks,tasks.files,tasks.assigned'
 	});
-	const boardData = structuredClone(response);
+	const users = await locals.pb.collection('users').getFullList(200,{
+		filter:`verified=true`,
+	});
+	const boardData = structuredClone(boards);
+	const userData = structuredClone(users)
 	return {
-		boards: boardData
+		boards: boardData,
+		users: userData
+
 	};
 }

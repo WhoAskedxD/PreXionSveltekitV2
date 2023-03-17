@@ -21,7 +21,7 @@
 			return board.id == form.sampleData.id;
 		});
 		addTask = false;
-		boardData[editIndex].expand.tasks = [...boardData[editIndex].expand.tasks, form.sampleData];
+		boardData[editIndex].expand.tasks = [form.sampleData, ...boardData[editIndex].expand.tasks];
 	}
 </script>
 
