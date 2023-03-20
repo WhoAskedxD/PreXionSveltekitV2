@@ -66,11 +66,13 @@ export const actions = {
 	createTask: async ({ request, locals }) => {
 		try {
 			const body = Object.fromEntries(await request.formData());
-			const {title, userId:user, boardId} = body;
+			const {title, userId:user, boardId, boardTasks} = body;
 			const newTask = {title,user};
 			const {id:newTaskId} = await locals.pb.collection('tasks').create(newTask);
-			const taskData = {newTask,boardId,newTaskId};
-			console.log(taskData);
+			const newTaskList = [newTaskId];
+			newTaskList.push(...boardTasks.split(','));
+			const taskData = {newTask,newTaskId,boardId,newTaskList};
+			await locals.pb.collection('boards').update(boardId,{tasks:newTaskList});
 			return {
 				success: true,
 				taskData: taskData
@@ -79,7 +81,6 @@ export const actions = {
 			console.log(error.data);
 		}
 	},
-
 };
 
 export async function load({ locals }) {

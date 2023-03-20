@@ -83,6 +83,7 @@
 								<div class="card-body">
 									<h2 class="card-title">
 										<input type="hidden" name="boardId" value={board.id} />
+										<input type="hidden" name="boardTasks" value={board.tasks} />
 										<input type="hidden" name="userId" value={data.user.id} />
 										<input
 											name="title"
