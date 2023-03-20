@@ -20,7 +20,10 @@
 			return board.id == form.taskData.boardId;
 		});
 		addTask = false;
-		boardData[editIndex].expand.tasks = [form.taskData.newTask, ...boardData[editIndex].expand.tasks];
+		boardData[editIndex].expand.tasks = [
+			form.taskData.newTask,
+			...boardData[editIndex].expand.tasks
+		];
 	}
 </script>
 
@@ -75,7 +78,7 @@
 					{#if addTask && boardReference == board.id}
 						<form action="?/createTask" method="POST" enctype="multipart/form-data" use:enhance>
 							<div
-								class="card card-compact cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl"
+								class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl z-10"
 								use:clickOutside
 								on:click_outside={handleClickOutside}
 								id={`new Card`}
@@ -94,14 +97,34 @@
 											use:init
 										/>
 									</h2>
-									<p>test</p>
+									<div class="assign-user">
+										<div class="dropdown">
+											<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+											<!-- svelte-ignore a11y-label-has-associated-control -->
+											<!-- svelte-ignore a11y-click-events-have-key-events -->
+											<label tabindex="0" class="m-1" on:click={() => {document.getElementById('assign-user-input').focus()}}>Assign</label>
+											<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+											<ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-60">
+												<input
+												id='assign-user-input'
+												name="assign"
+												type="text"
+												class="input h-fit pl-2 pr-0 w-full text-sm "
+												placeholder="Type a name or email address"
+												value=""
+											/>
+											<div class="mt-4">Users</div>										  
+											<li><div class="w-full text-sm">{data.users[0].name}</div></li>
+											</ul>
+										  </div>
+									</div>
 								</div>
 							</div>
 						</form>
 					{/if}
 					{#each board.expand?.tasks as task}
 						<div
-							class="card card-compact cursor-pointer bg-base-100 drop-shadow hover:drop-shadow-xl"
+							class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl"
 							taskid={task.id}
 							boardId={board.id}
 						>
@@ -116,13 +139,23 @@
 							{/if}
 							<div class="card-body" taskid={task.id} boardId={board.id}>
 								<h2 class="card-title" taskid={task.id} boardId={board.id}>{task.title}</h2>
-								<p>
-									{#if task.assigned?.length >=1}
+								{#if task.assigned?.length >= 2}
+									<div class="divider my-0" />
+									<span class="flex flex-row justify-end space-x-1">
 										{#each task.expand?.assigned as user}
-											{`${user.name} `}
+											{#if user.id != data.user.id}
+												<div class="avatar">
+													<div class="w-8 rounded-xl">
+														<img
+															src={`https://ui-avatars.com/api/?name=${user.name}`}
+															alt="Tailwind-CSS-Avatar-component"
+														/>
+													</div>
+												</div>
+											{/if}
 										{/each}
-									{/if}
-								</p>
+									</span>
+								{/if}
 								<!-- <div class="task-actions justify-end">
 									<button class="btn btn-primary">Learn now!</button>
 								</div> -->
