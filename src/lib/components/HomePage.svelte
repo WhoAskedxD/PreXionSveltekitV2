@@ -1,6 +1,5 @@
 <script>
 	import { getImageURL, clickOutside } from '$lib/utils.js';
-	import { invalidateAll } from '$app/navigation';
 	import { enhance, applyAction } from '$app/forms';
 	export let data;
 	export let form;
@@ -16,12 +15,12 @@
 		addTask = false;
 	}
 	$: if (form?.success) {
-		console.log(`reading form data sucessfully : `, form.sampleData);
+		console.log(`reading form data sucessfully : `, form.taskData);
 		const editIndex = boardData.findIndex((board) => {
-			return board.id == form.sampleData.id;
+			return board.id == form.taskData.boardId;
 		});
 		addTask = false;
-		boardData[editIndex].expand.tasks = [form.sampleData, ...boardData[editIndex].expand.tasks];
+		boardData[editIndex].expand.tasks = [form.taskData.newTask, ...boardData[editIndex].expand.tasks];
 	}
 </script>
 
@@ -83,7 +82,8 @@
 							>
 								<div class="card-body">
 									<h2 class="card-title">
-										<input type="hidden" name="id" value={board.id} />
+										<input type="hidden" name="boardId" value={board.id} />
+										<input type="hidden" name="userId" value={data.user.id} />
 										<input
 											name="title"
 											type="text"
