@@ -5,6 +5,8 @@
 	export let form;
 	let addTask = false;
 	let assignee = [];
+	let searchResults = [];
+	$: searchValue = '';
 	let boardData = data?.boards;
 	let otherUsers = data?.users.map((element) => element.name);
 	let boardReference;
@@ -26,6 +28,14 @@
 		assignee = assignee;
 		otherUsers = otherUsers;
 	}
+	function searchUser(searchValue) {
+		searchResults = [];
+		otherUsers.map((name) => {
+			if(name.toLowerCase().includes(searchValue.toLowerCase())){
+				searchResults.push(name);
+			}
+		})
+	}
 	$: if (form?.success) {
 		console.log(`reading form data sucessfully : `, form.taskData);
 		const editIndex = boardData.findIndex((board) => {
@@ -37,6 +47,8 @@
 			...boardData[editIndex].expand.tasks
 		];
 	}
+	console.log(data);
+	$: searchUser(searchValue)
 </script>
 
 <div class="home-page h-full flex flex-col">
@@ -132,7 +144,7 @@
 													type="text"
 													class="input h-fit pl-2 pr-0 w-full text-sm "
 													placeholder="Type a name or email address"
-													value=''
+													bind:value={searchValue}
 												/>
 												{#if assignee.length >= 1}
 													<div class="mt-4">Assigned Users</div>
@@ -140,13 +152,15 @@
 														<li>
 															<span class="justify-between">
 																{assignedUser}
-																<button on:click|preventDefault={() => removeAssignee(assignedUser)}>X</button>
+																<button on:click|preventDefault={() => removeAssignee(assignedUser)}
+																	>X</button
+																>
 															</span>
 														</li>
 													{/each}
 												{/if}
 												<div class="mt-4">Users</div>
-												{#each otherUsers as users}
+												{#each searchResults as users}
 													<li>
 														<button on:click|preventDefault={() => addAssignee(users)}
 															>{users}
