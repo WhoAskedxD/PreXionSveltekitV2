@@ -4,15 +4,27 @@
 	export let data;
 	export let form;
 	let addTask = false;
+	let assignee = [];
 	let boardData = data?.boards;
-	const sample = boardData[0].expand.tasks;
-	console.log(data);
+	let otherUsers = data?.users.map((element) => element.name);
 	let boardReference;
 	function init(el) {
 		el.focus();
 	}
 	function handleClickOutside(event) {
 		addTask = false;
+	}
+	function addAssignee(user) {
+		assignee.push(user);
+		otherUsers.splice(otherUsers.indexOf(user), 1);
+		otherUsers = otherUsers;
+		assignee = assignee;
+	}
+	function removeAssignee(user) {
+		otherUsers.push(user);
+		assignee.splice(assignee.indexOf(user), 1);
+		assignee = assignee;
+		otherUsers = otherUsers;
 	}
 	$: if (form?.success) {
 		console.log(`reading form data sucessfully : `, form.taskData);
@@ -97,26 +109,64 @@
 											use:init
 										/>
 									</h2>
-									<div class="assign-user">
+									<div class="assign-user flex items-center space-x-2">
 										<div class="dropdown">
 											<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 											<!-- svelte-ignore a11y-label-has-associated-control -->
 											<!-- svelte-ignore a11y-click-events-have-key-events -->
-											<label tabindex="0" class="m-1" on:click={() => {document.getElementById('assign-user-input').focus()}}>Assign</label>
+											<label
+												tabindex="0"
+												class="my-auto"
+												on:click={() => {
+													document.getElementById('assign-user-input').focus();
+												}}>Assign</label
+											>
 											<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-											<ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-60">
+											<ul
+												tabindex="0"
+												class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-60 mt-4"
+											>
 												<input
-												id='assign-user-input'
-												name="assign"
-												type="text"
-												class="input h-fit pl-2 pr-0 w-full text-sm "
-												placeholder="Type a name or email address"
-												value=""
-											/>
-											<div class="mt-4">Users</div>										  
-											<li><div class="w-full text-sm">{data.users[0].name}</div></li>
+													id="assign-user-input"
+													name="assign"
+													type="text"
+													class="input h-fit pl-2 pr-0 w-full text-sm "
+													placeholder="Type a name or email address"
+													value=''
+												/>
+												{#if assignee.length >= 1}
+													<div class="mt-4">Assigned Users</div>
+													{#each assignee as assignedUser}
+														<li>
+															<span class="justify-between">
+																{assignedUser}
+																<button on:click|preventDefault={() => removeAssignee(assignedUser)}>X</button>
+															</span>
+														</li>
+													{/each}
+												{/if}
+												<div class="mt-4">Users</div>
+												{#each otherUsers as users}
+													<li>
+														<button on:click|preventDefault={() => addAssignee(users)}
+															>{users}
+														</button>
+													</li>
+												{/each}
 											</ul>
-										  </div>
+										</div>
+										<div class="assigned-users space-x-1">
+											{#each assignee as assignedUser}
+												<div class="avatar">
+													<div class="w-8 rounded-xl">
+														<img
+															src={`https://ui-avatars.com/api/?name=${assignedUser}`}
+															alt="Tailwind-CSS-Avatar-component"
+														/>
+													</div>
+												</div>
+											{/each}
+										</div>
 									</div>
 								</div>
 							</div>
