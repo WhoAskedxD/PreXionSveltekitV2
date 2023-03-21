@@ -18,15 +18,15 @@
 	}
 	function addAssignee(user) {
 		assignee.push(user);
-		otherUsers.splice(otherUsers.indexOf(user), 1);
-		otherUsers = otherUsers;
+		searchResults.splice(searchResults.indexOf(user), 1);
+		searchResults = searchResults;
 		assignee = assignee;
 	}
 	function removeAssignee(user) {
-		otherUsers.push(user);
+		searchResults.push(user);
 		assignee.splice(assignee.indexOf(user), 1);
 		assignee = assignee;
-		otherUsers = otherUsers;
+		searchResults = searchResults;
 	}
 	function searchUser(searchValue) {
 		searchResults = [];
@@ -35,6 +35,11 @@
 				searchResults.push(name);
 			}
 		})
+		if(assignee.length >=1 ){
+			assignee.map((user) => {
+				searchResults.splice(searchResults.indexOf(user),1);
+			});
+		}
 	}
 	$: if (form?.success) {
 		console.log(`reading form data sucessfully : `, form.taskData);
