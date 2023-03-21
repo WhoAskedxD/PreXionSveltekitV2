@@ -135,8 +135,12 @@
 												tabindex="0"
 												class="my-auto"
 												on:click={() => {
+													document.getElementById('assign-user-input').focus();						
+												}}
+												on:focus={() => {
 													document.getElementById('assign-user-input').focus();
-												}}>Assign</label
+												}}
+												>Assign</label
 											>
 											<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 											<ul
@@ -155,21 +159,20 @@
 													<div class="mt-4">Assigned Users</div>
 													{#each assignee as assignedUser}
 														<li>
-															<span class="justify-between">
+															<label class="justify-between" for="assign-user-input">
 																{assignedUser}
-																<button on:click|preventDefault={() => removeAssignee(assignedUser)}
-																	>X</button
-																>
-															</span>
+																<div tabindex='0' on:click={() => removeAssignee(assignedUser)} on:keypress={() => removeAssignee(assignedUser)}
+																	>X</div>
+															</label>
 														</li>
 													{/each}
 												{/if}
 												<div class="mt-4">Users</div>
 												{#each searchResults as users}
 													<li>
-														<button on:click|preventDefault={() => addAssignee(users)}
+														<label tabindex="0" for="" on:click={() => addAssignee(users)} on:keypress={() => addAssignee(users)}
 															>{users}
-														</button>
+														</label>
 													</li>
 												{/each}
 											</ul>
