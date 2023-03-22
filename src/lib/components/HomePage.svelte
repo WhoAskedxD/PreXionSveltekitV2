@@ -1,15 +1,16 @@
 <script>
 	import { getImageURL, clickOutside } from '$lib/utils.js';
-	import { enhance,  } from '$app/forms';
+	import { enhance, applyAction } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	export let data;
 	export let form;
 	let addTask = false;
-	let assignee = [];
 	let userIds = [];
-	let searchResults = [];
 	$: searchValue = '';
+	$: loading = false;
 	let boardData = data?.boards;
-	let otherUsers = data?.users.map((element) => element.name);
+	let users = data?.users.map((element)=> element);
+	let assignee = [];
 	let boardReference;
 	function init(el) {
 		el.focus();
@@ -24,55 +25,65 @@
 	}
 	function addAssignee(user) {
 		assignee.push(user);
-		searchResults.splice(searchResults.indexOf(user), 1);
-		searchResults = searchResults;
+		users.splice(users.indexOf(user), 1);
+		users = users;
 		assignee = assignee;
 	}
 	function removeAssignee(user) {
-		searchResults.push(user);
+		users.push(user);
 		assignee.splice(assignee.indexOf(user), 1);
 		assignee = assignee;
-		searchResults = searchResults;
-	}
-	function searchUser(searchValue) {
-		searchResults = [];
-		otherUsers.map((name) => {
-			if (name.toLowerCase().includes(searchValue.toLowerCase())) {
-				searchResults.push(name);
-			}
-		});
-		if (assignee.length >= 1) {
-			assignee.map((user) => {
-				searchResults.splice(searchResults.indexOf(user), 1);
-			});
-		}
+		users = users;
 	}
 	function grabUserIds(ids){
 		userIds = [];
 		data.users.map((element) => {
-			assignee.forEach((user) => {
-				if (user == element.name){
-					console.log(`user is ${user} and element name is ${element.name} element id is : ${element.id}`);
+			assignee.forEach(({name}) => {
+				if (name == element.name){
 					userIds.push(element.id);
 				}
 			})
 		})
-		console.log(`userIds :`,userIds);
 	}
-	$: grabUserIds(assignee)
-	$: if (form?.success) {
-		console.log(`reading form data sucessfully : `, form.taskData);
+	function addNewTask(taskData) {
 		const editIndex = boardData.findIndex((board) => {
-			return board.id == form.taskData.boardId;
+			return board.id == taskData.boardId;
 		});
-		addTask = false;
-		boardData[editIndex].expand.tasks = [
-			form.taskData.newTask,
-			...boardData[editIndex].expand.tasks
-		];
+		const {newTask } = taskData;
+		console.log(newTask.assigned)
+		const tempAssigned = [];
+		data.users.map((element) => {
+			newTask.assigned.forEach((userid) => {
+				if(element.id == userid){
+					tempAssigned.push(element);
+				};
+			});
+		});
+		newTask.expand = {assigned:tempAssigned}
+		console.log(`new task is :`,newTask)
+		boardData[editIndex].expand.tasks = [newTask,...boardData[editIndex].expand.tasks];
+		console.log(`board is now :` ,boardData[editIndex]);
+	}
+	function submitTask(){
+		loading = true;
+		return async ({ result }) => {
+			switch (result.type) {
+				case 'success':
+					addTask = false;
+					console.log(`sucess! here is the results :`,result.data)
+					addNewTask(result.data.taskData);
+					await invalidateAll();
+					break;
+				case 'error':
+					break;
+				default:
+					await applyAction(result);
+			}
+			loading = false;
+		};
 	}
 	$: console.log(data,form);
-	$: searchUser(searchValue);
+	$: grabUserIds(assignee);
 </script>
 
 <div class="home-page h-full flex flex-col">
@@ -124,7 +135,7 @@
 					id="card"
 				>
 					{#if addTask && boardReference == board.id}
-						<form action="?/createTask" method="POST" enctype="multipart/form-data" use:enhance>
+						<form action="?/createTask" method="POST" enctype="multipart/form-data" use:enhance={submitTask}>
 							<div
 								class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl z-10"
 								use:clickOutside
@@ -182,7 +193,7 @@
 													{#each assignee as assignedUser}
 														<li>
 															<label class="justify-between" for="assign-user-input">
-																{assignedUser}
+																{assignedUser.name}
 																<div
 																	tabindex="0"
 																	on:click={() => removeAssignee(assignedUser)}
@@ -196,15 +207,15 @@
 													{/each}
 												{/if}
 												<div class="mt-4">Users</div>
-												{#each searchResults as users}
+												{#each users as user}
 													<li>
 														<label
 															tabindex="0"
 															for=""
-															on:click={() => addAssignee(users)}
-															on:keypress={() => addAssignee(users)}
+															on:click={() => addAssignee(user)}
+															on:keypress={() => addAssignee(user)}
 															on:keydown={focusAddTask}
-															>{users}
+															>{user.name}
 														</label>
 													</li>
 												{/each}
@@ -215,7 +226,7 @@
 												<div class="avatar">
 													<div class="w-8 rounded-xl">
 														<img
-															src={`https://ui-avatars.com/api/?name=${assignedUser}`}
+															src={`https://ui-avatars.com/api/?name=${assignedUser.name}`}
 															alt="Tailwind-CSS-Avatar-component"
 														/>
 													</div>
@@ -224,7 +235,7 @@
 										</div>
 									</div>
 									<div class="card-actions justify-center">
-										<button class="btn btn-primary" id="submit-new-task" >Add Task!</button>
+										<button class="btn btn-primary" id="submit-new-task" disabled={loading}>Add Task!</button>
 									</div>
 								</div>
 							</div>
@@ -247,7 +258,7 @@
 							{/if}
 							<div class="card-body" taskid={task.id} boardId={board.id}>
 								<h2 class="card-title" taskid={task.id} boardId={board.id}>{task.title}</h2>
-								{#if task.assigned?.length >= 2}
+								{#if task.assigned?.length >= 1}
 									<div class="divider my-0" />
 									<span class="flex flex-row justify-end space-x-1">
 										{#each task.expand?.assigned as user}

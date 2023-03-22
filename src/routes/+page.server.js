@@ -72,12 +72,12 @@ export const actions = {
 			if(assignedUsers){
 				assigned.push(...assignedUsers.split(','));	
 			}
+			// console.log({title,user,expand:{assigned}})
 			const newTask = {title,user,assigned};
-			console.log('new Task: ',newTask)
 			const {id:newTaskId} = await locals.pb.collection('tasks').create(newTask);
 			const newTaskList = [newTaskId];
 			newTaskList.push(...boardTasks.split(','));
-			const taskData = {newTask,newTaskId,boardId,newTaskList};
+			const taskData = {newTask,newTaskId,newTaskList,boardId};
 			await locals.pb.collection('boards').update(boardId,{tasks:newTaskList});
 			return {
 				success: true,
