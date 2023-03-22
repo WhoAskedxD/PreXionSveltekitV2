@@ -1,10 +1,11 @@
 <script>
 	import { getImageURL, clickOutside } from '$lib/utils.js';
-	import { enhance, applyAction } from '$app/forms';
+	import { enhance,  } from '$app/forms';
 	export let data;
 	export let form;
 	let addTask = false;
 	let assignee = [];
+	let userIds = [];
 	let searchResults = [];
 	$: searchValue = '';
 	let boardData = data?.boards;
@@ -46,6 +47,19 @@
 			});
 		}
 	}
+	function grabUserIds(ids){
+		userIds = [];
+		data.users.map((element) => {
+			assignee.forEach((user) => {
+				if (user == element.name){
+					console.log(`user is ${user} and element name is ${element.name} element id is : ${element.id}`);
+					userIds.push(element.id);
+				}
+			})
+		})
+		console.log(`userIds :`,userIds);
+	}
+	$: grabUserIds(assignee)
 	$: if (form?.success) {
 		console.log(`reading form data sucessfully : `, form.taskData);
 		const editIndex = boardData.findIndex((board) => {
@@ -57,7 +71,7 @@
 			...boardData[editIndex].expand.tasks
 		];
 	}
-	console.log(data);
+	$: console.log(data,form);
 	$: searchUser(searchValue);
 </script>
 
@@ -122,7 +136,7 @@
 										<input type="hidden" name="boardId" value={board.id} />
 										<input type="hidden" name="boardTasks" value={board.tasks} />
 										<input type="hidden" name="userId" value={data.user.id} />
-										<input type="hidden" name="assigned" value={assignee} />
+										<input type="hidden" name="assignedUsers" value={userIds} />
 										<input
 											name="title"
 											type="text"
@@ -210,7 +224,7 @@
 										</div>
 									</div>
 									<div class="card-actions justify-center">
-										<button class="btn btn-primary" id="submit-new-task">Add Task!</button>
+										<button class="btn btn-primary" id="submit-new-task" >Add Task!</button>
 									</div>
 								</div>
 							</div>

@@ -67,8 +67,13 @@ export const actions = {
 		try {
 			const body = Object.fromEntries(await request.formData());
 			console.log(`body :`,body)
-			const {title, userId:user, boardId, boardTasks} = body;
-			const newTask = {title,user};
+			const {title, userId:user, assignedUsers, boardId, boardTasks} = body;
+			const assigned = []
+			if(assignedUsers){
+				assigned.push(...assignedUsers.split(','));	
+			}
+			const newTask = {title,user,assigned};
+			console.log('new Task: ',newTask)
 			const {id:newTaskId} = await locals.pb.collection('tasks').create(newTask);
 			const newTaskList = [newTaskId];
 			newTaskList.push(...boardTasks.split(','));
@@ -80,6 +85,10 @@ export const actions = {
 			};
 		} catch (error) {
 			console.log(error.data);
+			return fail(400,
+				{
+					error:error.data					
+				})
 		}
 	},
 };
