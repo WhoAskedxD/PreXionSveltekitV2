@@ -156,7 +156,7 @@
 											>
 												<input
 													id="assign-user-input"
-													name="assign"
+													name="searched_user"
 													type="text"
 													class="input h-fit pl-2 pr-0 w-full text-sm "
 													placeholder="Type a name or email address"
