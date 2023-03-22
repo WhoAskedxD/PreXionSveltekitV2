@@ -258,7 +258,7 @@
 							{/if}
 							<div class="card-body" taskid={task.id} boardId={board.id}>
 								<h2 class="card-title" taskid={task.id} boardId={board.id}>{task.title}</h2>
-								{#if task.assigned?.length >= 1}
+								{#if task.assigned?.length > 1}
 									<div class="divider my-0" />
 									<span class="flex flex-row justify-end space-x-1">
 										{#each task.expand?.assigned as user}
