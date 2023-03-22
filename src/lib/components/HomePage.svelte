@@ -60,9 +60,8 @@
 			});
 		});
 		newTask.expand = {assigned:tempAssigned}
-		console.log(`new task is :`,newTask)
 		boardData[editIndex].expand.tasks = [newTask,...boardData[editIndex].expand.tasks];
-		console.log(`board is now :` ,boardData[editIndex]);
+		// console.log(`board is now :` ,boardData[editIndex]);
 	}
 	function submitTask(){
 		loading = true;
@@ -72,6 +71,8 @@
 					addTask = false;
 					console.log(`sucess! here is the results :`,result.data)
 					addNewTask(result.data.taskData);
+					assignee = [];
+					users = data?.users.map((element)=> element);
 					await invalidateAll();
 					break;
 				case 'error':
@@ -122,7 +123,7 @@
 					class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded dropdown"
 				>
 					<button
-						class="pl-4 "
+						class="pl-4 focus:ring"
 						id={board.id}
 						on:click={(e) => {
 							addTask = !addTask;
