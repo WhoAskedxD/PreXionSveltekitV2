@@ -66,6 +66,7 @@ export const actions = {
 	createTask: async ({ request, locals }) => {
 		try {
 			const body = Object.fromEntries(await request.formData());
+			console.log(`body :`,body)
 			const {title, userId:user, boardId, boardTasks} = body;
 			const newTask = {title,user};
 			const {id:newTaskId} = await locals.pb.collection('tasks').create(newTask);

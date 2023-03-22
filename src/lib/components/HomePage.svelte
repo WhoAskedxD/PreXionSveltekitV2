@@ -13,6 +13,11 @@
 	function init(el) {
 		el.focus();
 	}
+	function focusAddTask(event) {
+		if (event.key == 'Escape') {
+			document.getElementById('submit-new-task').focus();
+		}
+	}
 	function handleClickOutside(event) {
 		addTask = false;
 	}
@@ -31,13 +36,13 @@
 	function searchUser(searchValue) {
 		searchResults = [];
 		otherUsers.map((name) => {
-			if(name.toLowerCase().includes(searchValue.toLowerCase())){
+			if (name.toLowerCase().includes(searchValue.toLowerCase())) {
 				searchResults.push(name);
 			}
-		})
-		if(assignee.length >=1 ){
+		});
+		if (assignee.length >= 1) {
 			assignee.map((user) => {
-				searchResults.splice(searchResults.indexOf(user),1);
+				searchResults.splice(searchResults.indexOf(user), 1);
 			});
 		}
 	}
@@ -53,7 +58,7 @@
 		];
 	}
 	console.log(data);
-	$: searchUser(searchValue)
+	$: searchUser(searchValue);
 </script>
 
 <div class="home-page h-full flex flex-col">
@@ -117,6 +122,7 @@
 										<input type="hidden" name="boardId" value={board.id} />
 										<input type="hidden" name="boardTasks" value={board.tasks} />
 										<input type="hidden" name="userId" value={data.user.id} />
+										<input type="hidden" name="assigned" value={assignee} />
 										<input
 											name="title"
 											type="text"
@@ -135,11 +141,12 @@
 												tabindex="0"
 												class="my-auto"
 												on:click={() => {
-													document.getElementById('assign-user-input').focus();						
-												}}
-												on:focus={() => {
 													document.getElementById('assign-user-input').focus();
 												}}
+												on:focus|once={() => {
+													document.getElementById('assign-user-input').focus();
+												}}
+												on:keydown={focusAddTask}
 												>Assign</label
 											>
 											<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -154,6 +161,7 @@
 													class="input h-fit pl-2 pr-0 w-full text-sm "
 													placeholder="Type a name or email address"
 													bind:value={searchValue}
+													on:keydown={focusAddTask}
 												/>
 												{#if assignee.length >= 1}
 													<div class="mt-4">Assigned Users</div>
@@ -161,8 +169,14 @@
 														<li>
 															<label class="justify-between" for="assign-user-input">
 																{assignedUser}
-																<div tabindex='0' on:click={() => removeAssignee(assignedUser)} on:keypress={() => removeAssignee(assignedUser)}
-																	>X</div>
+																<div
+																	tabindex="0"
+																	on:click={() => removeAssignee(assignedUser)}
+																	on:keypress={() => removeAssignee(assignedUser)}
+																	on:keydown={focusAddTask}
+																>
+																	X
+																</div>
 															</label>
 														</li>
 													{/each}
@@ -170,7 +184,12 @@
 												<div class="mt-4">Users</div>
 												{#each searchResults as users}
 													<li>
-														<label tabindex="0" for="" on:click={() => addAssignee(users)} on:keypress={() => addAssignee(users)}
+														<label
+															tabindex="0"
+															for=""
+															on:click={() => addAssignee(users)}
+															on:keypress={() => addAssignee(users)}
+															on:keydown={focusAddTask}
 															>{users}
 														</label>
 													</li>
@@ -189,6 +208,9 @@
 												</div>
 											{/each}
 										</div>
+									</div>
+									<div class="card-actions justify-center">
+										<button class="btn btn-primary" id="submit-new-task">Add Task!</button>
 									</div>
 								</div>
 							</div>
