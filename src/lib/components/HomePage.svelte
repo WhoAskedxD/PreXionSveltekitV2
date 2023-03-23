@@ -8,9 +8,11 @@
 	$: loading = false;
 	let userIds = [];
 	$: searchValue = '';
-	let boardData = data?.boards;
-	let users = data?.users.map((element)=> element);
-	$: searchResults = users.filter((user) => user.name.toLowerCase().includes(searchValue.toLowerCase())); 
+	$: boardData = data?.boards;
+	let users = data?.users.map((element) => element);
+	$: searchResults = users.filter((user) =>
+		user.name.toLowerCase().includes(searchValue.toLowerCase())
+	);
 	let assignee = [];
 	let boardReference;
 	function init(el) {
@@ -36,47 +38,50 @@
 		assignee = assignee;
 		users = users;
 	}
-	function grabUserIds(ids){
+	function grabUserIds(ids) {
 		userIds = [];
 		data.users.map((element) => {
-			assignee.forEach(({name}) => {
-				if (name == element.name){
+			assignee.forEach(({ name }) => {
+				if (name == element.name) {
 					userIds.push(element.id);
 				}
-			})
-		})
+			});
+		});
 	}
 	function addNewTask(taskData) {
 		const editIndex = boardData.findIndex((board) => {
 			return board.id == taskData.boardId;
 		});
-		const {newTask } = taskData;
-		console.log(newTask.assigned)
+		const { newTask } = taskData;
+		console.log(newTask.assigned);
 		const tempAssigned = [];
 		data.users.map((element) => {
 			newTask.assigned.forEach((userid) => {
-				if(element.id == userid){
+				if (element.id == userid) {
 					tempAssigned.push(element);
-				};
+				}
 			});
 		});
-		newTask.expand = {assigned:tempAssigned}
-		boardData[editIndex].expand.tasks = [newTask,...boardData[editIndex].expand.tasks];
+		newTask.expand = { assigned: tempAssigned };
+		boardData[editIndex].expand.tasks = [newTask, ...boardData[editIndex].expand.tasks];
 		// console.log(`board is now :` ,boardData[editIndex]);
 	}
-	function submitTask(){
+	function submitTask() {
 		loading = true;
 		return async ({ result }) => {
+			console.log(result);
 			switch (result.type) {
 				case 'success':
 					addTask = false;
-					console.log(`sucess! here is the results :`,result.data)
-					addNewTask(result.data.taskData);
 					assignee = [];
-					users = data?.users.map((element)=> element);
+					console.log(`sucess! here is the results :`, result.data);
+					// addNewTask(result.data.taskData);
+					// users = data?.users.map((element) => element);
+					await applyAction(result);
 					await invalidateAll();
 					break;
 				case 'error':
+					console.log(`entered error case..`);
 					break;
 				default:
 					await applyAction(result);
@@ -84,7 +89,7 @@
 			loading = false;
 		};
 	}
-	$: console.log(data,form);
+	$: console.log(data, form);
 	$: grabUserIds(assignee);
 </script>
 
@@ -137,7 +142,12 @@
 					id="card"
 				>
 					{#if addTask && boardReference == board.id}
-						<form action="?/createTask" method="POST" enctype="multipart/form-data" use:enhance={submitTask}>
+						<form
+							action="?/createTask"
+							method="POST"
+							enctype="multipart/form-data"
+							use:enhance={submitTask}
+						>
 							<div
 								class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl z-10"
 								use:clickOutside
@@ -159,6 +169,25 @@
 											use:init
 										/>
 									</h2>
+									{#if form?.error}
+										<div class="alert alert-error shadow-lg w-full max-w-md">
+											<div>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="stroke-current flex-shrink-0 h-6 w-6"
+													fill="none"
+													viewBox="0 0 24 24"
+													><path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														stroke-width="2"
+														d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+													/></svg
+												>
+												<span>{form?.error.data.title.message}.</span>
+											</div>
+										</div>
+									{/if}
 									<div class="assign-user flex items-center space-x-2">
 										<div class="dropdown">
 											<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -173,8 +202,7 @@
 												on:focus|once={() => {
 													document.getElementById('assign-user-input').focus();
 												}}
-												on:keydown={focusAddTask}
-												>Assign</label
+												on:keydown={focusAddTask}>Assign</label
 											>
 											<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 											<ul
@@ -237,7 +265,9 @@
 										</div>
 									</div>
 									<div class="card-actions justify-center">
-										<button class="btn btn-primary" id="submit-new-task" disabled={loading}>Add Task!</button>
+										<button class="btn btn-primary" id="submit-new-task" disabled={loading}
+											>Add Task!</button
+										>
 									</div>
 								</div>
 							</div>
