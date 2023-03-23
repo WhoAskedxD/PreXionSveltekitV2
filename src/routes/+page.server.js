@@ -58,7 +58,12 @@ export const actions = {
 	},
 	updateBoard: async({ request, locals}) => {
 		try {
-			console.log(`running updateBoard.`);
+			const body = Object.fromEntries(await request.formData());
+			const { boardId, title } = body;
+			await locals.pb.collection('boards').update(boardId,{title});
+			return {
+				success:true
+			}
 		} catch (error) {
 			console.log(`ran into an issue`,error.data)
 		}

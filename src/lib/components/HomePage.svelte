@@ -7,14 +7,15 @@
 	let addTask = false;
 	$: loading = false;
 	let userIds = [];
+	let assignee = [];
+	let boardReference;
 	$: searchValue = '';
 	$: boardData = data?.boards;
 	let users = data?.users.map((element) => element);
 	$: searchResults = users.filter((user) =>
 		user.name.toLowerCase().includes(searchValue.toLowerCase())
 	);
-	let assignee = [];
-	let boardReference;
+
 	function init(el) {
 		el.focus();
 	}
@@ -48,24 +49,24 @@
 			});
 		});
 	}
-	function addNewTask(taskData) {
-		const editIndex = boardData.findIndex((board) => {
-			return board.id == taskData.boardId;
-		});
-		const { newTask } = taskData;
-		console.log(newTask.assigned);
-		const tempAssigned = [];
-		data.users.map((element) => {
-			newTask.assigned.forEach((userid) => {
-				if (element.id == userid) {
-					tempAssigned.push(element);
-				}
-			});
-		});
-		newTask.expand = { assigned: tempAssigned };
-		boardData[editIndex].expand.tasks = [newTask, ...boardData[editIndex].expand.tasks];
-		// console.log(`board is now :` ,boardData[editIndex]);
-	}
+	// function addNewTask(taskData) {
+	// 	const editIndex = boardData.findIndex((board) => {
+	// 		return board.id == taskData.boardId;
+	// 	});
+	// 	const { newTask } = taskData;
+	// 	console.log(newTask.assigned);
+	// 	const tempAssigned = [];
+	// 	data.users.map((element) => {
+	// 		newTask.assigned.forEach((userid) => {
+	// 			if (element.id == userid) {
+	// 				tempAssigned.push(element);
+	// 			}
+	// 		});
+	// 	});
+	// 	newTask.expand = { assigned: tempAssigned };
+	// 	boardData[editIndex].expand.tasks = [newTask, ...boardData[editIndex].expand.tasks];
+	// 	// console.log(`board is now :` ,boardData[editIndex]);
+	// }
 	function submitTask() {
 		loading = true;
 		return async ({ result }) => {
@@ -101,13 +102,19 @@
 				id={`board_${boardIndex}`}
 			>
 				<div class="board-title-container flex flex-row justify-between mx-2 items-center">
-					<div class="board-title flex-1 h-fit">
-						<input
-							type="text"
-							class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
-							value={board.title}
-						/>
-					</div>
+					<form action="?/updateBoard" method="POST" enctype="multipart/form-data" use:enhance>
+						<div class="board-title flex-1 h-fit">
+							<input
+								type="text"
+								class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
+								bind:value={board.title}
+							/>
+							<input type="hidden" name="boardId" value={board.id} />
+							<input type="hidden" name="title" value={board.title} />
+							<button type='submit' class="hidden"/>
+						</div>
+					</form>
+
 					<div class="flex-none">
 						<button class="btn btn-sm btn-ghost">
 							<svg
