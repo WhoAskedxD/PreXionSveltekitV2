@@ -1,6 +1,7 @@
 <script>
 	import { flip } from 'svelte/animate';
 	import { dndzone } from 'svelte-dnd-action';
+    import { Cards } from '$lib/components'
 	export let data;
 	export let form;
 	$: boards = data?.boards;
@@ -44,8 +45,8 @@
 			>
 				{#each board.expand.tasks as item (item.id)}
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<div class="card" animate:flip={{ duration: flipDurationMs }} on:click={handleClick}>
-						{item.title}
+					<div class="card" id={item.id} animate:flip={{ duration: flipDurationMs }} on:click={handleClick}>
+                        <Cards cardData={item} ></Cards>
 					</div>
 				{/each}
 			</div>

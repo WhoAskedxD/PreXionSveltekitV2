@@ -4,5 +4,7 @@ import HomePage from './HomePage.svelte'
 import Input from './Input.svelte'
 import Modal from './Modal.svelte'
 import TaskPage from './TaskPage.svelte'
+import Cards from './Cards.svelte'
 
-export { LandingPage,FormComponent,HomePage, Input, Modal, TaskPage,};
+
+export { LandingPage,FormComponent,HomePage, Input, Modal, TaskPage, Cards,};
