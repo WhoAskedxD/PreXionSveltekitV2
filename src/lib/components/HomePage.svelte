@@ -5,11 +5,12 @@
 	export let data;
 	export let form;
 	let addTask = false;
+	$: loading = false;
 	let userIds = [];
 	$: searchValue = '';
-	$: loading = false;
 	let boardData = data?.boards;
 	let users = data?.users.map((element)=> element);
+	$: searchResults = users.filter((user) => user.name.toLowerCase().includes(searchValue.toLowerCase())); 
 	let assignee = [];
 	let boardReference;
 	function init(el) {
@@ -165,7 +166,7 @@
 											<!-- svelte-ignore a11y-click-events-have-key-events -->
 											<label
 												tabindex="0"
-												class="my-auto"
+												class="my-auto focus:ring"
 												on:click={() => {
 													document.getElementById('assign-user-input').focus();
 												}}
@@ -208,7 +209,7 @@
 													{/each}
 												{/if}
 												<div class="mt-4">Users</div>
-												{#each users as user}
+												{#each searchResults as user}
 													<li>
 														<label
 															tabindex="0"
