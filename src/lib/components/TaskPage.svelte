@@ -11,6 +11,10 @@
 	$: boards = data?.boards;
 	$: addTask = false;
 	$: searchValue = '';
+	const users = data?.users.map((element) => element);
+	$: filteredUsers = users.filter((user) =>
+		user.name.toLowerCase().includes(searchValue.toLowerCase())
+	);
 	const flipDurationMs = 300;
 	function init(el) {
 		el.focus();
@@ -37,7 +41,7 @@
 	function handleClick(e) {
 		alert('dragabble elements are still clickable :)');
 	}
-	console.log(`data.boards :`, data?.boards);
+	console.log(`data :`, data, users);
 </script>
 
 <section
@@ -137,22 +141,28 @@
 										</div>
 									</div>
 								{/if}
-								<div class="assign-users flex items-cetner space-x-2" id="userlist">
+								<div class="assign-users flex items-cetner space-x-2" id="userlist">								
 									<div class="dropdown">
-										<label for="userlist" class="my-auto focus">Assign</label>
+										<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+										<label tabindex="0" for="userlist" class="my-auto focus">Assign</label>
 										<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 										<ul
 											tabindex="0"
 											class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-60 mt-4"
-										/>
-										<input
-											id="assign-user-input"
-											name="searched_user"
-											type="text"
-											class="input h-fit pl-2 pr-0 w-full text-sm "
-											placeholder="Type a name or email address"
-											bind:value={searchValue}
-										/>
+										>
+											<input
+												id="assign-user-input"
+												name="searched_user"
+												type="text"
+												class="input h-fit pl-2 pr-0 w-full text-sm "
+												placeholder="Type a name or email address"
+												bind:value={searchValue}
+											/>
+											<div class="mt-4">Users</div>
+												{#each filteredUsers as users}
+													<li>{users.name}</li>
+												{/each}
+										</ul>
 									</div>
 								</div>
 							</div>
