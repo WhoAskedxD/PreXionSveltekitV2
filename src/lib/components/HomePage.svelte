@@ -111,7 +111,7 @@
 							/>
 							<input type="hidden" name="boardId" value={board.id} />
 							<input type="hidden" name="title" value={board.title} />
-							<button type='submit' class="hidden"/>
+							<button type="submit" class="hidden" />
 						</div>
 					</form>
 					<div class="flex-none">
