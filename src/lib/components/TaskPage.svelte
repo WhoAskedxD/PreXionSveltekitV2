@@ -10,7 +10,7 @@
 	$: boardReference = null;
 	$: boards = data?.boards;
 	$: addTask = false;
-	$: searchValue = ''
+	$: searchValue = '';
 	const flipDurationMs = 300;
 	function init(el) {
 		el.focus();
@@ -78,26 +78,24 @@
 					>
 				</button>
 			</div>
-
-			<div class="flex-none" />
+			<div
+				class="board-add-container  mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded"
+			>
+				<button
+					class="pl-4 focus:ring"
+					id={board.id}
+					on:click={(e) => {
+						addTask = !addTask;
+						boardReference = e.target.id;
+					}}>+ Add Task</button
+				>
+			</div>
 			<div
 				class="board-content flex flex-col"
 				use:dndzone={{ items: board.expand.tasks, flipDurationMs }}
 				on:consider={(e) => handleDndConsiderCards(board.id, e)}
 				on:finalize={(e) => handleDndFinalizeCards(board.id, e)}
 			>
-				<div
-					class="board-add-container flex flex-row justify-between mx-2 my-2 items-center bg-base-100 hover:drop-shadow-xl rounded dropdown"
-				>
-					<button
-						class="pl-4 focus:ring"
-						id={board.id}
-						on:click={(e) => {
-							addTask = !addTask;
-							boardReference = e.target.id;
-						}}>+ Add Task</button
-					>
-				</div>
 				{#if addTask && boardReference == board.id}
 					<form action="?/createTask" method="POST" enctype="multipart/form-data" use:enhance>
 						<div
@@ -139,9 +137,22 @@
 										</div>
 									</div>
 								{/if}
-								<div class="assign-users flex items-cetner space-x-2" id='userlist'>
+								<div class="assign-users flex items-cetner space-x-2" id="userlist">
 									<div class="dropdown">
 										<label for="userlist" class="my-auto focus">Assign</label>
+										<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+										<ul
+											tabindex="0"
+											class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-60 mt-4"
+										/>
+										<input
+											id="assign-user-input"
+											name="searched_user"
+											type="text"
+											class="input h-fit pl-2 pr-0 w-full text-sm "
+											placeholder="Type a name or email address"
+											bind:value={searchValue}
+										/>
 									</div>
 								</div>
 							</div>
