@@ -114,7 +114,6 @@
 							<button type='submit' class="hidden"/>
 						</div>
 					</form>
-
 					<div class="flex-none">
 						<button class="btn btn-sm btn-ghost">
 							<svg
