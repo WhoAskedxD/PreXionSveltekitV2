@@ -101,7 +101,7 @@
 				on:finalize={(e) => handleDndFinalizeCards(board.id, e)}
 			>
 				{#if addTask && boardReference == board.id}
-					<form action="?/createTask" method="POST" enctype="multipart/form-data" use:enhance>
+					<form action="?/createTask" method="POST" enctype="multipart/form-data" class="z-10" use:enhance>
 						<div
 							class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl mx-2"
 							use:clickOutside
@@ -141,7 +141,7 @@
 										</div>
 									</div>
 								{/if}
-								<div class="assign-users flex items-cetner space-x-2" id="userlist">								
+								<div class="assign-users flex items-cetner space-x-2 " id="userlist">								
 									<div class="dropdown">
 										<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 										<label tabindex="0" for="userlist" class="my-auto focus">Assign</label>
