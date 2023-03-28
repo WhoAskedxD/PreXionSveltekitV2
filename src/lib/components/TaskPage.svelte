@@ -15,6 +15,7 @@
 	$: filteredUsers = users.filter((user) =>
 		user.name.toLowerCase().includes(searchValue.toLowerCase())
 	);
+	$: assignedUsers = [];
 	const flipDurationMs = 300;
 	function init(el) {
 		el.focus();
@@ -37,6 +38,18 @@
 		const colIdx = boards.findIndex((c) => c.id === cid);
 		boards[colIdx].expand.tasks = e.detail.items;
 		boards = [...boards];
+	}
+	function addUser(user) {
+		assignedUsers.push(user);
+		filteredUsers.splice(filteredUsers.indexOf(user), 1);
+		assignedUsers = assignedUsers;
+		filteredUsers = filteredUsers;
+	}
+	function removeUser(user) {
+		filteredUsers.push(user);
+		assignedUsers.splice(assignedUsers.indexOf(user), 1);
+		assignedUsers = assignedUsers;
+		filteredUsers = filteredUsers;
 	}
 	function handleClick(e) {
 		alert('dragabble elements are still clickable :)');
@@ -101,7 +114,13 @@
 				on:finalize={(e) => handleDndFinalizeCards(board.id, e)}
 			>
 				{#if addTask && boardReference == board.id}
-					<form action="?/createTask" method="POST" enctype="multipart/form-data" class="z-10" use:enhance>
+					<form
+						action="?/createTask"
+						method="POST"
+						enctype="multipart/form-data"
+						class="z-10"
+						use:enhance
+					>
 						<div
 							class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl mx-2"
 							use:clickOutside
@@ -141,7 +160,7 @@
 										</div>
 									</div>
 								{/if}
-								<div class="assign-users flex items-cetner space-x-2 " id="userlist">								
+								<div class="assign-users flex items-cetner space-x-2 " id="userlist">
 									<div class="dropdown">
 										<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 										<label tabindex="0" for="userlist" class="my-auto focus">Assign</label>
@@ -158,10 +177,23 @@
 												placeholder="Type a name or email address"
 												bind:value={searchValue}
 											/>
-											<div class="mt-4">Users</div>
-												{#each filteredUsers as users}
-													<li>{users.name}</li>
+											{#if assignedUsers.length >= 1}
+												<div class="mt-4">Assigned</div>
+												{#each assignedUsers as user}
+													<li>
+														<label for="assignedUsers" class="justify-between" on:click={()=> removeUser(user)}>
+															<span>{user.name}</span>
+															<span> X </span>
+														</label>
+													</li>
 												{/each}
+											{/if}
+											<div class="mt-4">Users</div>
+											{#each filteredUsers as user}
+												<li>
+													<label for="Users" on:click={() => addUser(user)}>{user.name}</label>
+												</li>
+											{/each}
 										</ul>
 									</div>
 								</div>
