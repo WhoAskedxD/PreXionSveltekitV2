@@ -11,7 +11,7 @@
 	$: boards = data?.boards;
 	$: addTask = false;
 	$: searchValue = '';
-	const users = data?.users.map((element) => element);
+	let users = data?.users.map((element) => element);
 	$: filteredUsers = users.filter((user) =>
 		user.name.toLowerCase().includes(searchValue.toLowerCase())
 	);
@@ -41,20 +41,21 @@
 	}
 	function addUser(user) {
 		assignedUsers.push(user);
-		filteredUsers.splice(filteredUsers.indexOf(user), 1);
+		users.splice(users.indexOf(user), 1);
 		assignedUsers = assignedUsers;
-		filteredUsers = filteredUsers;
+		users = users;
 	}
 	function removeUser(user) {
-		filteredUsers.push(user);
+		users.push(user);
 		assignedUsers.splice(assignedUsers.indexOf(user), 1);
 		assignedUsers = assignedUsers;
-		filteredUsers = filteredUsers;
+		users = users;
 	}
 	function handleClick(e) {
 		alert('dragabble elements are still clickable :)');
 	}
 	console.log(`data :`, data, users);
+	$: console.log(`filtered users`,filteredUsers);
 </script>
 
 <section
@@ -108,7 +109,7 @@
 				>
 			</div>
 			<div
-				class="board-content flex flex-col"
+				class="board-content flex flex-col space-y-2"
 				use:dndzone={{ items: board.expand.tasks, flipDurationMs }}
 				on:consider={(e) => handleDndConsiderCards(board.id, e)}
 				on:finalize={(e) => handleDndFinalizeCards(board.id, e)}
@@ -163,7 +164,7 @@
 								<div class="assign-users flex items-cetner space-x-2 " id="userlist">
 									<div class="dropdown">
 										<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-										<label tabindex="0" for="userlist" class="my-auto focus">Assign</label>
+										<label tabindex="0" for="" class="my-auto">Assign</label>
 										<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 										<ul
 											tabindex="0"
@@ -181,7 +182,7 @@
 												<div class="mt-4">Assigned</div>
 												{#each assignedUsers as user}
 													<li>
-														<label for="assignedUsers" class="justify-between" on:click={()=> removeUser(user)}>
+														<label tabindex="0" for="" class="justify-between" on:click={()=> removeUser(user)} on:keypress={() => removeUser(user)}>
 															<span>{user.name}</span>
 															<span> X </span>
 														</label>
@@ -191,7 +192,8 @@
 											<div class="mt-4">Users</div>
 											{#each filteredUsers as user}
 												<li>
-													<label for="Users" on:click={() => addUser(user)}>{user.name}</label>
+													<label tabindex="0" for="" on:click={() => addUser(user)} on:keypress={() => addUser(user)}>
+														{user.name}</label>
 												</li>
 											{/each}
 										</ul>
