@@ -2,9 +2,8 @@
 	import { flip } from 'svelte/animate';
 	import { dndzone } from 'svelte-dnd-action';
 	import { Cards } from '$lib/components';
-	import { getImageURL, clickOutside } from '$lib/utils.js';
-	import { enhance, applyAction } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
+	import { clickOutside } from '$lib/utils.js';
+	import { enhance,  } from '$app/forms';
 	export let data;
 	export let form;
 	$: boardReference = null;
@@ -53,15 +52,20 @@
 		assignedUsers = assignedUsers;
 		users = users;
 	}
+	function focusAddTask(event) {
+		if (event.key == 'Escape') {
+			document.getElementById('submit-new-task').focus();
+		}
+	}
 	function handleClick(e) {
 		// alert('dragabble elements are still clickable :)');
 	}
 	console.log(`data :`, data, users);
-	$: console.log(`drag disabeld ?`,dragDisabled);
+	// $: console.log(`drag disabeld ?`,dragDisabled);
 </script>
 
 <section
-	use:dndzone={{ items: boards, flipDurationMs, type: 'columns', dragDisabled}}
+	use:dndzone={{ items: boards, flipDurationMs, type: 'columns', dragDisabled }}
 	on:consider={handleDndConsiderColumns}
 	on:finalize={handleDndFinalizeColumns}
 	class="flex flex-row space-x-4"
@@ -113,7 +117,7 @@
 			</div>
 			<div
 				class="board-content flex flex-col space-y-2"
-				use:dndzone={{ items: board.expand.tasks, flipDurationMs, dragDisabled}}
+				use:dndzone={{ items: board.expand.tasks, flipDurationMs, dragDisabled }}
 				on:consider={(e) => handleDndConsiderCards(board.id, e)}
 				on:finalize={(e) => handleDndFinalizeCards(board.id, e)}
 			>
@@ -124,6 +128,7 @@
 						enctype="multipart/form-data"
 						class="z-10"
 						use:enhance
+						on:submit={handleClickOutside}
 					>
 						<div
 							class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl mx-2"
@@ -164,10 +169,12 @@
 										</div>
 									</div>
 								{/if}
-								<div class="assign-users flex items-cetner space-x-2 " id="userlist">
+								<div class="assign-users flex items-center space-x-2 " id="userlist">
 									<div class="dropdown">
 										<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-										<label tabindex="0" for="" class="my-auto">Assign</label>
+										<label tabindex="0" for="" class="my-auto" on:keydown={focusAddTask}
+											>Assign</label
+										>
 										<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 										<ul
 											tabindex="0"
@@ -180,12 +187,20 @@
 												class="input h-fit pl-2 pr-0 w-full text-sm "
 												placeholder="Type a name or email address"
 												bind:value={searchValue}
+												on:keydown={focusAddTask}
 											/>
 											{#if assignedUsers.length >= 1}
 												<div class="mt-4">Assigned</div>
 												{#each assignedUsers as user}
 													<li>
-														<label tabindex="0" for="" class="justify-between" on:click={()=> removeUser(user)} on:keypress={() => removeUser(user)}>
+														<label
+															tabindex="0"
+															for=""
+															class="justify-between"
+															on:click={() => removeUser(user)}
+															on:keypress={() => removeUser(user)}
+															on:keydown={focusAddTask}
+														>
 															<span>{user.name}</span>
 															<span> X </span>
 														</label>
@@ -195,13 +210,31 @@
 											<div class="mt-4">Users</div>
 											{#each filteredUsers as user}
 												<li>
-													<label tabindex="0" for="" on:click={() => addUser(user)} on:keypress={() => addUser(user)}>
-														{user.name}</label>
+													<label
+														tabindex="0"
+														for=""
+														on:click={() => addUser(user)}
+														on:keypress={() => addUser(user)}
+														on:keydown={focusAddTask}
+													>
+														{user.name}</label
+													>
 												</li>
 											{/each}
 										</ul>
 									</div>
+									{#each assignedUsers as users}
+										<div class="avatar">
+											<div class="w-8 rounded-xl">
+												<img
+													src={`https://ui-avatars.com/api/?name=${users.name}`}
+													alt="Tailwind-CSS-Avatar-component"
+												/>
+											</div>
+										</div>
+									{/each}
 								</div>
+								<button id="submit-new-task" class="btn btn-primary">Add Task</button>
 							</div>
 						</div>
 					</form>
