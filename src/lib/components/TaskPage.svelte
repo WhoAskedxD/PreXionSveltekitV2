@@ -17,11 +17,13 @@
 	);
 	$: assignedUsers = [];
 	const flipDurationMs = 300;
+	let dragDisabled = false;
 	function init(el) {
 		el.focus();
 	}
 	function handleClickOutside(event) {
 		addTask = false;
+		dragDisabled = false;
 	}
 	function handleDndConsiderColumns(e) {
 		boards = e.detail.items;
@@ -52,14 +54,14 @@
 		users = users;
 	}
 	function handleClick(e) {
-		alert('dragabble elements are still clickable :)');
+		// alert('dragabble elements are still clickable :)');
 	}
 	console.log(`data :`, data, users);
-	$: console.log(`filtered users`,filteredUsers);
+	$: console.log(`drag disabeld ?`,dragDisabled);
 </script>
 
 <section
-	use:dndzone={{ items: boards, flipDurationMs, type: 'columns' }}
+	use:dndzone={{ items: boards, flipDurationMs, type: 'columns', dragDisabled}}
 	on:consider={handleDndConsiderColumns}
 	on:finalize={handleDndFinalizeColumns}
 	class="flex flex-row space-x-4"
@@ -104,13 +106,14 @@
 					id={board.id}
 					on:click={(e) => {
 						addTask = !addTask;
+						dragDisabled = !dragDisabled;
 						boardReference = e.target.id;
 					}}>+ Add Task</button
 				>
 			</div>
 			<div
 				class="board-content flex flex-col space-y-2"
-				use:dndzone={{ items: board.expand.tasks, flipDurationMs }}
+				use:dndzone={{ items: board.expand.tasks, flipDurationMs, dragDisabled}}
 				on:consider={(e) => handleDndConsiderCards(board.id, e)}
 				on:finalize={(e) => handleDndFinalizeCards(board.id, e)}
 			>
