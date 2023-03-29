@@ -61,6 +61,9 @@
 		// alert('dragabble elements are still clickable :)');
 	}
 	console.log(`data :`, data, users);
+	$: if(form?.success){
+		handleClickOutside();
+	}
 	// $: console.log(`drag disabeld ?`,dragDisabled);
 </script>
 
@@ -128,7 +131,6 @@
 						enctype="multipart/form-data"
 						class="z-10"
 						use:enhance
-						on:submit={handleClickOutside}
 					>
 						<div
 							class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl mx-2"
