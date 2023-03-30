@@ -35,10 +35,16 @@
 		boards[colIdx].expand.tasks = e.detail.items;
 		boards = [...boards];
 	}
-	function handleDndFinalizeCards(cid, e) {
+	async function handleDndFinalizeCards(cid, e) {
 		const colIdx = boards.findIndex((c) => c.id === cid);
 		boards[colIdx].expand.tasks = e.detail.items;
 		boards = [...boards];
+		const newTasksOrder = e.detail.items.map((element) => element.id);
+		const response = await fetch('/api/task',{
+			method:'POST',
+			body:JSON.stringify(newTasksOrder)
+		});
+		console.log(newTasksOrder);
 	}
 	function addUser(user) {
 		assignedUsers.push(user);
@@ -60,7 +66,7 @@
 	function handleClick(e) {
 		// alert('dragabble elements are still clickable :)');
 	}
-	console.log(`data :`, data, users);
+	$: console.log(`bords :`, data, users,boards);
 	$: if(form?.success){
 		handleClickOutside();
 	}

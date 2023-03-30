@@ -3,7 +3,7 @@
 	import { getImageURL, clickOutside } from '$lib/utils.js';
 	const user = $page.data?.user
 	export let cardData;
-	console.log(`cardData :`, cardData);
+	//console.log(`cardData :`, cardData);
 </script>
 
 <div class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl" taskid={cardData.id}>
