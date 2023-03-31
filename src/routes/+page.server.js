@@ -105,10 +105,13 @@ export async function load({ locals }) {
 	const users = await locals.pb.collection('users').getFullList(200, {
 		filter: `verified=true`
 	});
+	const boardOrderList = await locals.pb.collection('boardorder').getFullList(200,{});
+	const boardOrder = structuredClone(boardOrderList);
 	const boardData = structuredClone(boards);
 	const userData = structuredClone(users);
 	return {
 		boards: boardData,
+		boardorder:boardOrder,
 		users: userData
 	};
 }

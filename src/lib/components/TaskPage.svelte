@@ -42,7 +42,7 @@
 		const newTasksOrder = e.detail.items.map((element) => element.id);
 		const response = await fetch('/api/task',{
 			method:'POST',
-			body:JSON.stringify(newTasksOrder)
+			body:JSON.stringify({ boardId:cid,tasksOrder:newTasksOrder })
 		});
 		console.log(newTasksOrder);
 	}
@@ -66,7 +66,7 @@
 	function handleClick(e) {
 		// alert('dragabble elements are still clickable :)');
 	}
-	$: console.log(`bords :`, data, users,boards);
+	$: console.log(`bords :`, data);
 	$: if(form?.success){
 		handleClickOutside();
 	}
