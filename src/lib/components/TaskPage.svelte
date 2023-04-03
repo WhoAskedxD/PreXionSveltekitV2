@@ -50,7 +50,6 @@
 			method:'POST',
 			body:JSON.stringify({ boardId:cid,tasksOrder:newTasksOrder })
 		});
-		console.log(newTasksOrder);
 	}
 	function addUser(user) {
 		assignedUsers.push(user);
