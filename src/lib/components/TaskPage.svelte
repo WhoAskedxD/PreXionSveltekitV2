@@ -16,6 +16,7 @@
 	);
 	$: assignedUsers = [];
 	const flipDurationMs = 300;
+	const boardOrderRecordID = data.boardInfo[0].id;
 	let dragDisabled = false;
 	function init(el) {
 		el.focus();
@@ -25,10 +26,15 @@
 		dragDisabled = false;
 	}
 	function handleDndConsiderColumns(e) {
-		boards = e.detail.items;
+		boards = e.detail.items;	
 	}
-	function handleDndFinalizeColumns(e) {
+	async function handleDndFinalizeColumns(e) {
 		boards = e.detail.items;
+		const newColumnOrder = e.detail.items.map((element) => element.id);
+		const response = await fetch('/api/boardOrder',{
+			method:'POST',
+			body:JSON.stringify({ recordID:boardOrderRecordID,boardorder:newColumnOrder })
+		});
 	}
 	function handleDndConsiderCards(cid, e) {
 		const colIdx = boards.findIndex((c) => c.id === cid);
@@ -66,7 +72,7 @@
 	function handleClick(e) {
 		// alert('dragabble elements are still clickable :)');
 	}
-	$: console.log(`bords :`, data);
+	$: console.log(`data :`, data);
 	$: if(form?.success){
 		handleClickOutside();
 	}
