@@ -68,6 +68,23 @@ export const actions = {
 			console.log(`ran into an issue`,error.data)
 		}
 	},
+	createBoard: async({ request, locals}) => {
+		try {
+			const body = Object.fromEntries(await request.formData());
+			const { user, title, assigned, boardOrder, boardOrderId} = body;
+			const newboardList = boardOrder.split(',');
+			const data = {title,user,assigned};
+			const newBoard =  await locals.pb.collection('boards').create(data);
+			const { id } = newBoard;
+			newboardList.push(id)
+			await locals.pb.collection('boardorder').update(boardOrderId, {boards:newboardList});
+			return {
+				success:true
+			}
+		} catch (error) {
+			console.log(`ran into an issue`,error.data)
+		}
+	},
 	createTask: async ({ request, locals }) => {
 		try {
 			const body = Object.fromEntries(await request.formData());
@@ -106,15 +123,11 @@ export async function load({ locals }) {
 			filter: `verified=true`
 		});
 		const boardOrderList = await locals.pb.collection('boardorder').getFullList(200,{});
-		console.log(boardOrderList)
 		const newBoards = boardOrderList[0].boards;
 		const newList = [];
 		newBoards.map((element) => {
 			boards.forEach((board) => {
-				console.log('element is : ',element);
-				console.log('board.id is : ',board.id);
 				if(board.id == element) {
-					console.log(`matches! `)
 					newList.push(board);
 				}
 			});

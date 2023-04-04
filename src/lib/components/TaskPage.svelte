@@ -10,6 +10,10 @@
 	$: boards = data?.boards;
 	$: addTask = false;
 	$: addBoard = false;
+	const newBoardData = {
+		title:"New Board",
+		user:data.user.id,
+	};
 	$: searchValue = '';
 	let users = data?.users.map((element) => element);
 	$: filteredUsers = users.filter((user) =>
@@ -17,7 +21,7 @@
 	);
 	$: assignedUsers = [];
 	const flipDurationMs = 300;
-	const boardOrderRecordID = data.boardInfo[0].id;
+	const boardOrderRecord = data.boardInfo[0];
 	let dragDisabled = false;
 	function init(el) {
 		el.focus();
@@ -35,7 +39,7 @@
 		const newColumnOrder = e.detail.items.map((element) => element.id);
 		const response = await fetch('/api/boardOrder', {
 			method: 'POST',
-			body: JSON.stringify({ recordID: boardOrderRecordID, boardorder: newColumnOrder })
+			body: JSON.stringify({ recordID: boardOrderRecord.id, boardorder: newColumnOrder })
 		});
 	}
 	function handleDndConsiderCards(cid, e) {
@@ -80,7 +84,7 @@
 	// $: console.log(`drag disabeld ?`,dragDisabled);
 </script>
 
-<div class=" flex flex-row space-x-4">
+<div class=" flex flex-row space-x-4 overflow-scroll">
 	<section
 		use:dndzone={{ items: boards, flipDurationMs, type: 'columns', dragDisabled }}
 		on:consider={handleDndConsiderColumns}
@@ -132,145 +136,161 @@
 						}}>+ Add Task</button
 					>
 				</div>
-				<div
-					class="board-content flex flex-col space-y-2"
-					use:dndzone={{ items: board.expand.tasks, flipDurationMs, dragDisabled }}
-					on:consider={(e) => handleDndConsiderCards(board.id, e)}
-					on:finalize={(e) => handleDndFinalizeCards(board.id, e)}
-				>
-					{#if addTask && boardReference == board.id}
-						<form
-							action="?/createTask"
-							method="POST"
-							enctype="multipart/form-data"
-							class="z-10"
-							use:enhance
-						>
-							<div
-								class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl mx-2"
-								use:clickOutside
-								on:click_outside={handleClickOutside}
-								id={`new Card`}
+				{#if board.expand?.tasks}
+					<div
+						class="board-content flex flex-col space-y-2"
+						use:dndzone={{ items: board.expand.tasks, flipDurationMs, dragDisabled }}
+						on:consider={(e) => handleDndConsiderCards(board.id, e)}
+						on:finalize={(e) => handleDndFinalizeCards(board.id, e)}
+					>
+						{#if addTask && boardReference == board.id}
+							<form
+								action="?/createTask"
+								method="POST"
+								enctype="multipart/form-data"
+								class="z-10"
+								use:enhance
 							>
-								<input type="hidden" name="boardId" value={board.id} />
-								<input type="hidden" name="boardTasks" value={board.tasks} />
-								<input type="hidden" name="userId" value={data.user.id} />
-								<div class="card-body">
-									<h2 class="card-title">
-										<input
-											name="title"
-											type="text"
-											class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
-											placeholder="Enter new task here"
-											value=""
-											use:init
-										/>
-									</h2>
-									{#if form?.error}
-										<div class="alert alert-error shadow-lg w-full max-w-md">
-											<div>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													class="stroke-current flex-shrink-0 h-6 w-6"
-													fill="none"
-													viewBox="0 0 24 24"
-													><path
-														stroke-linecap="round"
-														stroke-linejoin="round"
-														stroke-width="2"
-														d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-													/></svg
-												>
-												<span>{form?.error.data.title.message}.</span>
+								<div
+									class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl mx-2"
+									use:clickOutside
+									on:click_outside={handleClickOutside}
+									id={`new Card`}
+								>
+									<input type="hidden" name="boardId" value={board.id} />
+									<input type="hidden" name="boardTasks" value={board.tasks} />
+									<input type="hidden" name="userId" value={data.user.id} />
+									<div class="card-body">
+										<h2 class="card-title">
+											<input
+												name="title"
+												type="text"
+												class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
+												placeholder="Enter new task here"
+												value=""
+												use:init
+											/>
+										</h2>
+										{#if form?.error}
+											<div class="alert alert-error shadow-lg w-full max-w-md">
+												<div>
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														class="stroke-current flex-shrink-0 h-6 w-6"
+														fill="none"
+														viewBox="0 0 24 24"
+														><path
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															stroke-width="2"
+															d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+														/></svg
+													>
+													<span>{form?.error.data.title.message}.</span>
+												</div>
 											</div>
-										</div>
-									{/if}
-									<div class="assign-users flex items-center space-x-2 " id="userlist">
-										<div class="dropdown">
-											<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-											<label tabindex="0" for="" class="my-auto" on:keydown={focusAddTask}
-												>Assign</label
-											>
-											<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-											<ul
-												tabindex="0"
-												class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-60 mt-4"
-											>
-												<input
-													id="assign-user-input"
-													name="searched_user"
-													type="text"
-													class="input h-fit pl-2 pr-0 w-full text-sm "
-													placeholder="Type a name or email address"
-													bind:value={searchValue}
-													on:keydown={focusAddTask}
-												/>
-												{#if assignedUsers.length >= 1}
-													<div class="mt-4">Assigned</div>
-													{#each assignedUsers as user}
+										{/if}
+										<div class="assign-users flex items-center space-x-2 " id="userlist">
+											<div class="dropdown">
+												<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+												<label tabindex="0" for="" class="my-auto" on:keydown={focusAddTask}
+													>Assign</label
+												>
+												<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+												<ul
+													tabindex="0"
+													class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-60 mt-4"
+												>
+													<input
+														id="assign-user-input"
+														name="searched_user"
+														type="text"
+														class="input h-fit pl-2 pr-0 w-full text-sm "
+														placeholder="Type a name or email address"
+														bind:value={searchValue}
+														on:keydown={focusAddTask}
+													/>
+													{#if assignedUsers.length >= 1}
+														<div class="mt-4">Assigned</div>
+														{#each assignedUsers as user}
+															<li>
+																<label
+																	tabindex="0"
+																	for=""
+																	class="justify-between"
+																	on:click={() => removeUser(user)}
+																	on:keypress={() => removeUser(user)}
+																	on:keydown={focusAddTask}
+																>
+																	<span>{user.name}</span>
+																	<span> X </span>
+																</label>
+															</li>
+														{/each}
+													{/if}
+													<div class="mt-4">Users</div>
+													{#each filteredUsers as user}
 														<li>
 															<label
 																tabindex="0"
 																for=""
-																class="justify-between"
-																on:click={() => removeUser(user)}
-																on:keypress={() => removeUser(user)}
+																on:click={() => addUser(user)}
+																on:keypress={() => addUser(user)}
 																on:keydown={focusAddTask}
 															>
-																<span>{user.name}</span>
-																<span> X </span>
-															</label>
+																{user.name}</label
+															>
 														</li>
 													{/each}
-												{/if}
-												<div class="mt-4">Users</div>
-												{#each filteredUsers as user}
-													<li>
-														<label
-															tabindex="0"
-															for=""
-															on:click={() => addUser(user)}
-															on:keypress={() => addUser(user)}
-															on:keydown={focusAddTask}
-														>
-															{user.name}</label
-														>
-													</li>
-												{/each}
-											</ul>
-										</div>
-										{#each assignedUsers as users}
-											<div class="avatar">
-												<div class="w-8 rounded-xl">
-													<img
-														src={`https://ui-avatars.com/api/?name=${users.name}`}
-														alt="Tailwind-CSS-Avatar-component"
-													/>
-												</div>
+												</ul>
 											</div>
-										{/each}
+											{#each assignedUsers as users}
+												<div class="avatar">
+													<div class="w-8 rounded-xl">
+														<img
+															src={`https://ui-avatars.com/api/?name=${users.name}`}
+															alt="Tailwind-CSS-Avatar-component"
+														/>
+													</div>
+												</div>
+											{/each}
+										</div>
+										<button id="submit-new-task" class="btn btn-primary">Add Task</button>
 									</div>
-									<button id="submit-new-task" class="btn btn-primary">Add Task</button>
 								</div>
+							</form>
+						{/if}
+						{#each board.expand.tasks as item (item.id)}
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<div
+								class="card"
+								id={item.id}
+								animate:flip={{ duration: flipDurationMs }}
+								on:click={handleClick}
+							>
+								<Cards cardData={item} />
 							</div>
-						</form>
-					{/if}
-					{#each board.expand.tasks as item (item.id)}
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<div
-							class="card"
-							id={item.id}
-							animate:flip={{ duration: flipDurationMs }}
-							on:click={handleClick}
-						>
-							<Cards cardData={item} />
-						</div>
-					{/each}
-				</div>
+						{/each}
+					</div>
+				{/if}
 			</div>
 		{/each}
 	</section>
-	{#if !addBoard}
-		<div class="new-Board">New board</div>
-	{/if}
+	<div class="new-Board-column w-64 py-2 flex-none">
+		<div class="board-title bg-base-200 rounded-lg">
+			<form action="?/createBoard" method="POST" enctype="multipart/form-data" use:enhance>
+				<input
+					type="text"
+					class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
+					bind:value={newBoardData.title}
+				/>
+				<input type="hidden" name="user" value={newBoardData.user} />
+				<input type="hidden" name="assigned" value={newBoardData.user} />
+				<input type="hidden" name="title" value={newBoardData.title}/>
+				<input type="hidden" name="boardOrder" value={boardOrderRecord.boards}/>
+				<input type="hidden" name="boardOrderId" value={boardOrderRecord.id}/>
+				<button type="submit" class="hidden"/>
+			</form>
+		</div>
+	</div>
 </div>
