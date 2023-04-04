@@ -136,9 +136,8 @@
 						}}>+ Add Task</button
 					>
 				</div>
-				{#if board.expand?.tasks}
 					<div
-						class="board-content flex flex-col space-y-2"
+						class="board-content flex flex-col space-y-2 min-h-[16px]"
 						use:dndzone={{ items: board.expand.tasks, flipDurationMs, dragDisabled }}
 						on:consider={(e) => handleDndConsiderCards(board.id, e)}
 						on:finalize={(e) => handleDndFinalizeCards(board.id, e)}
@@ -272,7 +271,6 @@
 							</div>
 						{/each}
 					</div>
-				{/if}
 			</div>
 		{/each}
 	</section>

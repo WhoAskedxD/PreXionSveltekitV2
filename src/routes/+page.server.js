@@ -127,9 +127,13 @@ export async function load({ locals }) {
 		const newList = [];
 		newBoards.map((element) => {
 			boards.forEach((board) => {
+				if(!board.expand.tasks){
+					board.expand.tasks = [];
+				}
 				if(board.id == element) {
 					newList.push(board);
 				}
+				
 			});
 		});
 		const boardInfo = structuredClone(boardOrderList);
