@@ -98,31 +98,34 @@ export const actions = {
 };
 
 export async function load({ locals }) {
-	const boards = await locals.pb.collection('boards').getFullList(200, {
-		expand: 'tasks,tasks.files,tasks.assigned'
-	});
-	const users = await locals.pb.collection('users').getFullList(200, {
-		filter: `verified=true`
-	});
-	const boardOrderList = await locals.pb.collection('boardorder').getFullList(200,{});
-	const newBoards = boardOrderList[0].boards;
-	const newList = [];
-	newBoards.map((element) => {
-		boards.forEach((board) => {
-			console.log('element is : ',element);
-			console.log('board.id is : ',board.id);
-			if(board.id == element) {
-				console.log(`matches! `)
-				newList.push(board);
-			}
+	if(locals.user){
+		const boards = await locals.pb.collection('boards').getFullList(200, {
+			expand: 'tasks,tasks.files,tasks.assigned'
 		});
-	});
-	const boardInfo = structuredClone(boardOrderList);
-	const boardData = structuredClone(newList);
-	const userData = structuredClone(users);
-	return {
-		boards: boardData,
-		boardInfo: boardInfo,
-		users: userData
+		const users = await locals.pb.collection('users').getFullList(200, {
+			filter: `verified=true`
+		});
+		const boardOrderList = await locals.pb.collection('boardorder').getFullList(200,{});
+		console.log(boardOrderList)
+		const newBoards = boardOrderList[0].boards;
+		const newList = [];
+		newBoards.map((element) => {
+			boards.forEach((board) => {
+				console.log('element is : ',element);
+				console.log('board.id is : ',board.id);
+				if(board.id == element) {
+					console.log(`matches! `)
+					newList.push(board);
+				}
+			});
+		});
+		const boardInfo = structuredClone(boardOrderList);
+		const boardData = structuredClone(newList);
+		const userData = structuredClone(users);
+		return {
+			boards: boardData,
+			boardInfo: boardInfo,
+			users: userData
+		};
 	};
 }

@@ -1,7 +1,7 @@
 <script>
 	export let data;
 	export let form;
-	import { LandingPage, HomePage,TaskPage  } from '$lib/components';
+	import { LandingPage,TaskPage  } from '$lib/components';
 	
 </script>
 
