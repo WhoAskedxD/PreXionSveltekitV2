@@ -85,6 +85,18 @@ export const actions = {
 			console.log(`ran into an issue`,error.data)
 		}
 	},
+	deleteBoard: async({ request, locals}) => {
+		try {
+			const body = Object.fromEntries(await request.formData());
+			const {RECORD_ID,} = body;
+			await locals.pb.collection('boards').delete(RECORD_ID);
+			return {
+				success:true,
+			}
+		} catch (error) {
+			console.log(`ran into an issue`,error.data)
+		}
+	},
 	createTask: async ({ request, locals }) => {
 		try {
 			const body = Object.fromEntries(await request.formData());

@@ -61,7 +61,7 @@
 			</div>
 			<div class="divider my-0"></div>
 			<!-- Page content here -->
-			<div class="h-[calc(90%)] w-full">
+			<div class="h-[calc(90%)] w-full overflow-scroll">
 				<slot />
 			</div>
 		</div>

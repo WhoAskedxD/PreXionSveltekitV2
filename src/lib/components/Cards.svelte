@@ -3,10 +3,15 @@
 	import { getImageURL, clickOutside } from '$lib/utils.js';
 	const user = $page.data?.user
 	export let cardData;
+	function handleClick(e) {
+		alert('dragabble elements are still clickable :)');
+	}
 	//console.log(`cardData :`, cardData);
 </script>
 
-<div class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl" taskid={cardData.id}>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div class="card card-compact bg-base-100 drop-shadow hover:drop-shadow-xl" taskid={cardData.id} on:click={handleClick}
+>
 	{#if cardData.image}
 		<figure>
 			<img src={getImageURL(cardData.collectionId, cardData.id, cardData.image)} alt="task pic!" id={cardData.id} />
