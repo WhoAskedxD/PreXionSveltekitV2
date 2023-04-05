@@ -81,7 +81,7 @@ export const actions = {
 			await locals.pb.collection('boardorder').update(boardOrderId, {boards:newboardList});
 			return {
 				success:true
-			}
+			};
 		} catch (error) {
 			console.log(`ran into an issue at createBoard`,error.data)
 			const body = Object.fromEntries(await request.formData());
@@ -95,7 +95,7 @@ export const actions = {
 			await locals.pb.collection('boards').delete(RECORD_ID);
 			return {
 				success:true,
-			}
+			};
 		} catch (error) {
 			console.log(`ran into an issue`,error.data)
 		}

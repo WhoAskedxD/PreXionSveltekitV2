@@ -21,6 +21,7 @@
 	$: assignedUsers = [];
 	const flipDurationMs = 300;
 	const boardOrderRecord = data.boardInfo[0];
+	const value = (node, param) => node.setAttribute('value', param);
 	let dragDisabled = false;
 	function init(el) {
 		el.focus();
@@ -80,7 +81,8 @@
 
 	$: console.log(`data :`, data);
 	$: console.log(`form :`, form);
-	$: if (form?.success) {
+	$: if (form?.taskData) {
+		console.log(`running handleclickoutside`)
 		handleClickOutside();
 	}
 	// $: console.log(`drag disabeld ?`,dragDisabled);
@@ -309,7 +311,7 @@
 					type="text"
 					class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
 					name="title"
-					value="New Board"
+					use:value={"New Board"}
 					on:focus={event => event.target.select()}
 				/>
 				<input type="hidden" name="user" value={data.user.id} />
