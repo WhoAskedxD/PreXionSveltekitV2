@@ -1,7 +1,7 @@
 <script>
 	import { flip } from 'svelte/animate';
 	import { dndzone } from 'svelte-dnd-action';
-	import { Cards, } from '$lib/components';
+	import { Cards } from '$lib/components';
 	import { clickOutside } from '$lib/utils.js';
 	import { enhance } from '$app/forms';
 	export let data;
@@ -9,10 +9,11 @@
 	$: boardReference = null;
 	$: boards = data?.boards;
 	$: addTask = false;
+	$: addBoard = false;
 	const deleteBoardData = {
-		RECORD_ID:null,
-		title:null,
-	}
+		RECORD_ID: null,
+		title: null
+	};
 	$: searchValue = '';
 	let users = data?.users.map((element) => element);
 	$: filteredUsers = users.filter((user) =>
@@ -21,14 +22,15 @@
 	$: assignedUsers = [];
 	const flipDurationMs = 300;
 	const boardOrderRecord = data.boardInfo[0];
-	const value = (node, param) => node.setAttribute('value', param);
 	let dragDisabled = false;
 	function init(el) {
 		el.focus();
 	}
 	function handleClickOutside(event) {
+		console.log(`running click outside.`)
 		addTask = false;
 		dragDisabled = false;
+		addBoard = false;
 	}
 	function handleDndConsiderColumns(e) {
 		boards = e.detail.items;
@@ -74,35 +76,29 @@
 			document.getElementById('submit-new-task').focus();
 		}
 	}
-	function deleteBoard(RECORD_ID,title) {
-		deleteBoardData.RECORD_ID= RECORD_ID;
-		deleteBoardData.title= title;
+	function deleteBoard(RECORD_ID, title) {
+		deleteBoardData.RECORD_ID = RECORD_ID;
+		deleteBoardData.title = title;
 	}
-
 	$: console.log(`data :`, data);
 	$: console.log(`form :`, form);
 	$: if (form?.taskData) {
-		console.log(`running handleclickoutside`)
 		handleClickOutside();
 	}
-	// $: console.log(`drag disabeld ?`,dragDisabled);
 </script>
 
 <div class=" flex flex-row space-x-4">
 	<input type="checkbox" id="my-modal-4" class="modal-toggle" />
 	<label for="my-modal-4" class="modal cursor-pointer">
 		<label class="modal-box relative" for="">
-			<h3 class="text-lg font-bold text-center">Are you sure you wana delete {deleteBoardData.title}!</h3>
+			<h3 class="text-lg font-bold text-center">
+				Are you sure you wana delete {deleteBoardData.title}!
+			</h3>
 			<div class="modal-action justify-between">
 				<label for="my-modal-4" class="btn">Close!</label>
-				<form
-					action="?/deleteBoard"
-					method="POST"
-					enctype="multipart/form-data"
-					use:enhance
-				>
-				<input type="hidden" name="RECORD_ID" value={deleteBoardData.RECORD_ID} />
-				<button><label for="my-modal-4" class="btn">Delete!</label></button>
+				<form action="?/deleteBoard" method="POST" enctype="multipart/form-data" use:enhance>
+					<input type="hidden" name="RECORD_ID" value={deleteBoardData.RECORD_ID} />
+					<button><label for="my-modal-4" class="btn">Delete!</label></button>
 				</form>
 			</div>
 		</label>
@@ -125,7 +121,7 @@
 							type="text"
 							class="input input-ghost rounded-lg h-fit ml-1 pl-0 pr-0 w-full text-md font-semibold"
 							bind:value={board.title}
-							on:focus={event => event.target.select()}		
+							on:focus={(event) => event.target.select()}
 						/>
 						<input type="hidden" name="boardId" value={board.id} />
 						<input type="hidden" name="title" value={board.title} />
@@ -154,7 +150,10 @@
 							class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
 						>
 							<li>
-								<label for="my-modal-4" class="" on:click={()=> deleteBoard(board.id,board.title)}>Delete Board</label>						
+								<!-- svelte-ignore a11y-click-events-have-key-events -->
+								<label for="my-modal-4" class="" on:click={() => deleteBoard(board.id, board.title)}
+									>Delete Board</label
+								>
 							</li>
 						</ul>
 					</div>
@@ -306,20 +305,30 @@
 	</section>
 	<div class="new-Board-column w-64 py-2 flex-none">
 		<div class="board-title bg-base-200 rounded-lg">
-			<form action="?/createBoard" method="POST" enctype="multipart/form-data" use:enhance>
-				<input
-					type="text"
-					class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
-					name="title"
-					use:value={"New Board"}
-					on:focus={event => event.target.select()}
-				/>
-				<input type="hidden" name="user" value={data.user.id} />
-				<input type="hidden" name="assigned" value={data.user.id} />
-				<input type="hidden" name="boardOrder" value={boardOrderRecord.boards} />
-				<input type="hidden" name="boardOrderId" value={boardOrderRecord.id} />
-				<button type="submit" class="hidden" />
-			</form>
+			{#if addBoard}
+				<form action="?/createBoard" method="POST" enctype="multipart/form-data" use:enhance>
+					<input
+						id="new-board-title"
+						type="text"
+						class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
+						name="title"
+						value=""
+						placeholder="New Board"
+						use:clickOutside
+						on:click_outside={handleClickOutside}
+						on:focus={(event) => event.target.select()}
+					/>
+					<input type="hidden" name="user" value={data.user.id} />
+					<input type="hidden" name="assigned" value={data.user.id} />
+					<input type="hidden" name="boardOrder" value={boardOrderRecord.boards} />
+					<input type="hidden" name="boardOrderId" value={boardOrderRecord.id} />
+					<button type="submit" class="hidden" />
+				</form>
+			{:else}
+				<button on:click={() => {
+					addBoard = !addBoard;
+					}}> Add new Board! </button>
+			{/if}
 		</div>
 	</div>
 </div>
