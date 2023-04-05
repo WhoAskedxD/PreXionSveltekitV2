@@ -72,6 +72,7 @@ export const actions = {
 		try {
 			const body = Object.fromEntries(await request.formData());
 			const { user, title, assigned, boardOrder, boardOrderId} = body;
+			console.log(body)
 			const newboardList = boardOrder.split(',');
 			const data = {title,user,assigned};
 			const newBoard =  await locals.pb.collection('boards').create(data);
@@ -82,7 +83,9 @@ export const actions = {
 				success:true
 			}
 		} catch (error) {
-			console.log(`ran into an issue`,error.data)
+			console.log(`ran into an issue at createBoard`,error.data)
+			const body = Object.fromEntries(await request.formData());
+			console.log(`body :`,body)
 		}
 	},
 	deleteBoard: async({ request, locals}) => {
@@ -117,6 +120,8 @@ export const actions = {
 				taskData: taskData
 			};
 		} catch (error) {
+			const body = Object.fromEntries(await request.formData());
+			console.log(`body :`,body)
 			console.log(error.data);
 			return fail(400,
 				{

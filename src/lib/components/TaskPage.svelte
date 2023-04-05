@@ -1,7 +1,7 @@
 <script>
 	import { flip } from 'svelte/animate';
 	import { dndzone } from 'svelte-dnd-action';
-	import { Cards,Modal } from '$lib/components';
+	import { Cards, } from '$lib/components';
 	import { clickOutside } from '$lib/utils.js';
 	import { enhance } from '$app/forms';
 	export let data;
@@ -9,10 +9,6 @@
 	$: boardReference = null;
 	$: boards = data?.boards;
 	$: addTask = false;
-	const newBoardData = {
-		title: 'New Board',
-		user: data.user.id
-	};
 	const deleteBoardData = {
 		RECORD_ID:null,
 		title:null,
@@ -125,8 +121,9 @@
 					<form action="?/updateBoard" method="POST" enctype="multipart/form-data" use:enhance>
 						<input
 							type="text"
-							class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
+							class="input input-ghost rounded-lg h-fit ml-1 pl-0 pr-0 w-full text-md font-semibold"
 							bind:value={board.title}
+							on:focus={event => event.target.select()}		
 						/>
 						<input type="hidden" name="boardId" value={board.id} />
 						<input type="hidden" name="title" value={board.title} />
@@ -311,11 +308,12 @@
 				<input
 					type="text"
 					class="input input-ghost rounded-lg h-fit pl-2 pr-0 w-full text-md font-semibold"
-					bind:value={newBoardData.title}
+					name="title"
+					value="New Board"
+					on:focus={event => event.target.select()}
 				/>
-				<input type="hidden" name="user" value={newBoardData.user} />
-				<input type="hidden" name="assigned" value={newBoardData.user} />
-				<input type="hidden" name="title" value={newBoardData.title} />
+				<input type="hidden" name="user" value={data.user.id} />
+				<input type="hidden" name="assigned" value={data.user.id} />
 				<input type="hidden" name="boardOrder" value={boardOrderRecord.boards} />
 				<input type="hidden" name="boardOrderId" value={boardOrderRecord.id} />
 				<button type="submit" class="hidden" />
