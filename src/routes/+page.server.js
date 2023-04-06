@@ -141,27 +141,21 @@ export async function load({ locals }) {
 		});
 		const boardOrderList = await locals.pb.collection('boardorder').getFullList(200,{});
 		const newBoards = boardOrderList[0].boards;
-		const newList = [];
-		newBoards.map((element) => {
-			boards.forEach((board) => {
-				if(!board.expand.tasks){
-					board.expand.tasks = [];
-				}
-				if(board.id == element) {
-					newList.push(board);
-				}
-				
-			});
+		boards.sort((a,b,) => {
+			return newBoards.indexOf(a.id) - newBoards.indexOf(b.id)
+		})
+		boards.forEach((board) => {
+			if(!board.expand.tasks){
+				board.expand.tasks = [];
+			}
 		});
-		const testData = structuredClone(boards);
 		const boardInfo = structuredClone(boardOrderList);
-		const boardData = structuredClone(newList);
+		const boardData = structuredClone(boards);
 		const userData = structuredClone(users);
 		return {
 			boards: boardData,
 			boardInfo: boardInfo,
 			users: userData,
-			testData:testData
 		};
 	};
 }

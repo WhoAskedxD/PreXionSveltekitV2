@@ -304,7 +304,9 @@
 		{/each}
 	</section>
 	<div class="new-Board-column w-64 py-2 flex-none">
-		<div class="board-title bg-base-200 rounded-lg">
+		<div class="board-title bg-base-200 rounded-lg" 
+			use:clickOutside
+			on:click_outside={handleClickOutside}>
 			{#if addBoard}
 				<form action="?/createBoard" method="POST" enctype="multipart/form-data" use:enhance>
 					<input
@@ -315,8 +317,6 @@
 						value=""
 						placeholder="New Board"
 						use:init
-						use:clickOutside
-						on:click_outside={handleClickOutside}
 						on:focus={(event) => event.target.select()}
 					/>
 					<input type="hidden" name="user" value={data.user.id} />
