@@ -153,13 +153,15 @@ export async function load({ locals }) {
 				
 			});
 		});
+		const testData = structuredClone(boards);
 		const boardInfo = structuredClone(boardOrderList);
 		const boardData = structuredClone(newList);
 		const userData = structuredClone(users);
 		return {
 			boards: boardData,
 			boardInfo: boardInfo,
-			users: userData
+			users: userData,
+			testData:testData
 		};
 	};
 }

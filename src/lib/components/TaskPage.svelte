@@ -314,6 +314,7 @@
 						name="title"
 						value=""
 						placeholder="New Board"
+						use:init
 						use:clickOutside
 						on:click_outside={handleClickOutside}
 						on:focus={(event) => event.target.select()}
