@@ -150,10 +150,10 @@
 							class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
 						>
 							<li>
-								<!-- svelte-ignore a11y-click-events-have-key-events -->
-								<label for="my-modal-4" class="" on:click={() => deleteBoard(board.id, board.title)}
-									>Delete Board</label
-								>
+								{#if board.user == data.user.id}
+									<!-- svelte-ignore a11y-click-events-have-key-events -->
+									<label for="my-modal-4" class="" on:click={() => deleteBoard(board.id, board.title)}>Delete Board</label>
+								{/if}
 							</li>
 						</ul>
 					</div>
