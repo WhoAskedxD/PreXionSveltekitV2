@@ -153,6 +153,9 @@
 								{#if board.user == data.user.id}
 									<!-- svelte-ignore a11y-click-events-have-key-events -->
 									<label for="my-modal-4" class="" on:click={() => deleteBoard(board.id, board.title)}>Delete Board</label>
+									{:else}
+										<!-- svelte-ignore a11y-click-events-have-key-events -->
+									<label for="my-modal-4" class="">Unassign from Board</label>
 								{/if}
 							</li>
 						</ul>
